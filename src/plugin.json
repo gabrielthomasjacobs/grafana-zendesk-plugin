@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Zendeskplugin",
+  "id": "gabrielthomasjacobs-zendeskplugin-datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_zendeskplugin",
+  "info": {
+    "description": "Adds zendesk integration",
+    "author": {
+      "name": "Gabrielthomasjacobs"
+    },
+    "keywords": ["datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": "^9.3.8",
+    "plugins": []
+  }
+}
