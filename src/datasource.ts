@@ -9,6 +9,6 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
   }
 
   getDefaultQuery(app: CoreApp): Partial<MyQuery> {
-    return { status: "open" };
+    return { status: ["new"] };
   }
 }

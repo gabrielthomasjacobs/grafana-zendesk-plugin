@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
@@ -119,10 +120,15 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 			return backend.DataResponse{}, fmt.Errorf("unmarshal: %w", err)
 		}
 		q := req.URL.Query()
-		q.Add("query", "status:"+input.Status)
+
+		outstrings := make([]string, 0)
+		for _, status := range input.Status {
+			outstrings = append(outstrings, "status:"+status)
+		}
+		out := strings.Join(outstrings, ` `)
+
+		q.Add("query", out)
 		q.Add("sort_by", "created_at")
-		// q.Add("type", input.TicketType)
-		// q.Add("status", strconv.Itoa(input.created))
 		req.URL.RawQuery = q.Encode()
 	}
 	resp, err := d.httpClient.Do(req)
@@ -182,6 +188,7 @@ func (d *Datasource) CheckHealth(ctx context.Context, _ *backend.CheckHealthRequ
 	if err != nil {
 		return newHealthCheckErrorf("could not create request"), nil
 	}
+	r.Header.Set("Accept", "application/json")
 	resp, err := d.httpClient.Do(r)
 	if err != nil {
 		return newHealthCheckErrorf("request error"), nil
