@@ -125,6 +125,15 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		for _, status := range input.Status {
 			outstrings = append(outstrings, "status:"+status)
 		}
+
+		for _, priority := range input.Priority {
+			outstrings = append(outstrings, "priority:"+priority)
+		}
+
+		for _, tag := range input.Tags {
+			outstrings = append(outstrings, "tag:"+tag)
+		}
+
 		out := strings.Join(outstrings, ` `)
 
 		q.Add("query", out)
@@ -163,9 +172,18 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 	for i, p := range body.TicketResults {
 		times[i] = p.CreatedAt
 		if i == 0 {
-			values[i] = 1
+			if p.Status != "solved" {
+				values[i] = 1
+			} else {
+				values[i] = 0
+			}
 		} else {
-			values[i] = values[i-1] + 1
+			if p.Status == "solved" {
+				values[i] = values[i-1] - 1
+			} else {
+				values[i] = values[i-1] + 1
+			}
+
 		}
 	}
 
@@ -175,7 +193,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 			data.NewFrame(
 				"response",
 				data.NewField("time", nil, times),
-				data.NewField("Open Tickets", nil, values),
+				data.NewField("Tickets", nil, values),
 			),
 		},
 	}, nil

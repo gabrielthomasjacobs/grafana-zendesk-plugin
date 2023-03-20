@@ -52,5 +52,7 @@ type apiTicket struct {
 type apiQuery struct {
 	TicketType string   `json:"type"`
 	Status     []string `json:"status"`
+	Priority   []string `json:"priority"`
+	Tags       []string `json:"tags"`
 	Created    string   `json:"created_at"`
 }

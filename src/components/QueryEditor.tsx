@@ -2,74 +2,59 @@ import React, { PureComponent } from 'react';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
 import { MyDataSourceOptions, MyQuery } from '../types';
-import { HorizontalGroup, Input, Label } from '@grafana/ui';
+import { Button, HorizontalGroup, Input, Label } from '@grafana/ui';
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export class QueryEditor extends PureComponent<Props> {
   statusFilters: Record<string, boolean> = { new: true, open: false, hold: false, pending: false, solved: false };
 
+  priorityFilters: Record<string, boolean> = { low: true, normal: false, high: false, urgent: false };
+  
+  CreateToggleGroup = ({bindTo, queryKey, label}: 
+    {bindTo: Record<string, boolean>,  queryKey: string, label: string}) => {
+    return(
+    <HorizontalGroup style={{marginTop: '1rem'}}>
+      <Label>{label}</Label>
+      { Object.keys(bindTo).map((key) => {
+        return (<>
+          <Button
+            onClick={() => {
+              bindTo[key] = !bindTo[key]
+              const update: Record<string, string[]> = {}
+              update[queryKey] = Object.keys(bindTo).filter(k => bindTo[k])
+              this.props.onChange({ ...this.props.query, ...update })
+            }}
+            style={
+              (bindTo[key]) ? { backgroundColor: '#2196f3', color: 'white' } : {
+                                backgroundColor: 'gray', color: 'white' }}
+            type="button">
+              {key}
+            </Button>
+        </>)
+      })}
+    </HorizontalGroup>)
+  }
+
+  handleTagsChange = (value: string) => {
+    this.props.onChange({ ...this.props.query, tags: value.replace(' ', '').split(',') })
+  }
+
+
   render() {
-    const handleFilterChange = (key: string , value: boolean) => {
-      this.statusFilters[key] = value;
-      const newStatus = {status: Object.keys(this.statusFilters).filter(k => this.statusFilters[k])};
-      this.props.onChange({ ...this.props.query, ...newStatus })
-    };
-    
     return (
-      <HorizontalGroup>
-        <Label>Status</Label>
-        { Object.keys(this.statusFilters).map((key) => {
-          return (<>
-            <Input 
-            type="checkbox" 
-            id={`${key}Status`}
-            checked={this.statusFilters[key]}
-            onClick={(e) => handleFilterChange(key, e.currentTarget.checked)}/>
-            <label htmlFor={`${key}Status`}>{key}</label>
-          </>)
-        })}
-        {/* <Input 
-          type="checkbox" 
-          id="newStatus" 
-          checked={this.statusFilters.new}
-          onClick={(e) => handleFilterChange("new", e.currentTarget.checked)}/>
-        <label htmlFor="newStatus">New</label>
-
-        <Input 
-          type="checkbox" 
-          id="newStatus" 
-          checked={this.statusFilters.new}
-          onClick={(e) => handleFilterChange("new", e.currentTarget.checked)}/>
-        <label htmlFor="newStatus">New</label>
-
-        <Input 
-          type="checkbox" 
-          id="openStatus"
-          checked={this.statusFilters.open}
-          onChange={(e) => handleFilterChange("open", e.currentTarget.checked)}/>
-        <label htmlFor="openStatus">Open</label>
-
-        <Input
-          type="checkbox"
-          id="holdStatus"
-          checked={this.statusFilters.hold}
-          onClick={(e) => handleFilterChange("hold", e.currentTarget.checked)}/>
-        <label htmlFor="holdStatus">Hold</label>
-
-        <Input type="checkbox" id="pendingStatus"/>
-        <label htmlFor="pendingStatus">Pending</label>
-
-        <Input type="checkbox" id="solvedStatus"/>
-        <label htmlFor="solvedStatus">Solved</label> */}
-
-        {/* <Input
-          type="select"
-          label="Status"
-          value={this.props.query.status}
-          onChange={(e) => this.props.onChange({ ...this.props.query, status: e.currentTarget.value })}
-        /> */}
-      </HorizontalGroup>
-    );
+      <>
+        {this.CreateToggleGroup({bindTo: this.statusFilters, queryKey: 'status', label: 'Status'})}
+        {this.CreateToggleGroup({bindTo: this.priorityFilters, queryKey: 'priority', label: 'Priority'})}
+        <HorizontalGroup>
+          <Label>Tags</Label>
+          <Input
+            type="text"
+            value={this.props.query?.tags?.join(', ') || ''}
+            onChange={(e) => this.handleTagsChange(e.currentTarget.value)}
+          />
+        </HorizontalGroup>
+      </>
+    )
   }
 }
