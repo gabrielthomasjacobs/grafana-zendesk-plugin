@@ -137,7 +137,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		out := strings.Join(outstrings, ` `)
 
 		q.Add("query", out)
-		q.Add("sort_by", "created_at")
+		q.Add("sort_by", "updated_at")
 		req.URL.RawQuery = q.Encode()
 	}
 	resp, err := d.httpClient.Do(req)
@@ -166,36 +166,40 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		return backend.DataResponse{}, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
 	}
 
-	// Create slice of values for time and values.
-	times := make([]time.Time, len(body.TicketResults))
-	values := make([]float64, len(body.TicketResults))
-	for i, p := range body.TicketResults {
-		times[i] = p.CreatedAt
-		if i == 0 {
-			if p.Status != "solved" {
-				values[i] = 1
-			} else {
-				values[i] = 0
-			}
-		} else {
-			if p.Status == "solved" {
-				values[i] = values[i-1] - 1
-			} else {
-				values[i] = values[i-1] + 1
-			}
+	// create a field map
+	type TimesValues struct {
+		times  []time.Time
+		values []float64
+	}
 
+	fields := make(map[string]*TimesValues)
+
+	appendTimesValues := func(key string, time time.Time, value float64) {
+		fields[key].times = append(fields[key].times, time)
+		fields[key].values = append(fields[key].values, value)
+	}
+
+	// loop over the results and add them to the fields map
+	// the key is the ticket status and the value is a struct with times and incrementing values
+	for _, p := range body.TicketResults {
+		if _, ok := fields[p.Status]; !ok {
+			fields[p.Status] = &TimesValues{times: []time.Time{query.TimeRange.From, p.UpdatedAt}, values: []float64{0, 1}}
+		} else {
+			previousValue := fields[p.Status].values[len(fields[p.Status].values)-1]
+			appendTimesValues(p.Status, p.UpdatedAt, previousValue+1)
 		}
 	}
 
-	// Create frame and add it to the response
+	// Generate frames from fields map and add each to the response
+	fieldFrames := []*data.Frame{}
+
+	for key, field := range fields {
+		frame := data.NewFrame("Tickets: ", data.NewField("time", nil, field.times), data.NewField(key, nil, field.values))
+		fieldFrames = append(fieldFrames, frame)
+	}
+
 	return backend.DataResponse{
-		Frames: []*data.Frame{
-			data.NewFrame(
-				"response",
-				data.NewField("time", nil, times),
-				data.NewField("Tickets", nil, values),
-			),
-		},
+		Frames: fieldFrames,
 	}, nil
 }
 

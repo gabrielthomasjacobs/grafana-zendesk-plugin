@@ -14,26 +14,27 @@ export class QueryEditor extends PureComponent<Props> {
   CreateToggleGroup = ({bindTo, queryKey, label}: 
     {bindTo: Record<string, boolean>,  queryKey: string, label: string}) => {
     return(
-    <HorizontalGroup style={{marginTop: '1rem'}}>
-      <Label>{label}</Label>
-      { Object.keys(bindTo).map((key) => {
-        return (<>
-          <Button
-            onClick={() => {
-              bindTo[key] = !bindTo[key]
-              const update: Record<string, string[]> = {}
-              update[queryKey] = Object.keys(bindTo).filter(k => bindTo[k])
-              this.props.onChange({ ...this.props.query, ...update })
-            }}
-            style={
-              (bindTo[key]) ? { backgroundColor: '#2196f3', color: 'white' } : {
-                                backgroundColor: 'gray', color: 'white' }}
-            type="button">
-              {key}
-            </Button>
-        </>)
-      })}
-    </HorizontalGroup>)
+      <HorizontalGroup>
+        <Label>{label}</Label>
+        { Object.keys(bindTo).map((key) => {
+          return (<>
+            <Button
+              onClick={() => {
+                bindTo[key] = !bindTo[key]
+                const update: Record<string, string[]> = {}
+                update[queryKey] = Object.keys(bindTo).filter(k => bindTo[k])
+                this.props.onChange({ ...this.props.query, ...update })
+              }}
+              style={
+                (bindTo[key]) ? { backgroundColor: '#2196f3', color: 'white' } : {
+                                  backgroundColor: 'gray', color: 'white' }}
+              type="button">
+                {key}
+              </Button>
+          </>)
+        })}
+      </HorizontalGroup>
+    )
   }
 
   handleTagsChange = (value: string) => {
@@ -43,7 +44,7 @@ export class QueryEditor extends PureComponent<Props> {
 
   render() {
     return (
-      <>
+      <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
         {this.CreateToggleGroup({bindTo: this.statusFilters, queryKey: 'status', label: 'Status'})}
         {this.CreateToggleGroup({bindTo: this.priorityFilters, queryKey: 'priority', label: 'Priority'})}
         <HorizontalGroup>
@@ -54,7 +55,7 @@ export class QueryEditor extends PureComponent<Props> {
             onChange={(e) => this.handleTagsChange(e.currentTarget.value)}
           />
         </HorizontalGroup>
-      </>
+      </div>
     )
   }
 }
