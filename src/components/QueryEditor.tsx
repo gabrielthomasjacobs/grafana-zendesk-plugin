@@ -7,9 +7,15 @@ import { Button, HorizontalGroup, Input, Label } from '@grafana/ui';
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export class QueryEditor extends PureComponent<Props> {
-  statusFilters: Record<string, boolean> = { new: true, open: false, hold: false, pending: false, solved: false };
-
+  
+  statusFilters: Record<string, boolean> = { new: true, open: true, hold: true, pending: true, solved: true };
   priorityFilters: Record<string, boolean> = { low: true, normal: false, high: false, urgent: false };
+
+  constructor(props: Props) {
+    super(props);
+    this.props.query?.status?.map((status) => this.statusFilters[status] = true);
+    this.props.query?.priority?.map((priority) => this.priorityFilters[priority] = true);
+  }
   
   CreateToggleGroup = ({bindTo, queryKey, label}: 
     {bindTo: Record<string, boolean>,  queryKey: string, label: string}) => {
