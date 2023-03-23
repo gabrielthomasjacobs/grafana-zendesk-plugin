@@ -1,14 +1,14 @@
 import { CoreApp, DataSourceInstanceSettings } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions } from './types';
+import { ZendeskQuery, ZendeskDatasourceOptions } from './types';
 import { DataSourceWithBackend } from '@grafana/runtime';
 
-export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptions> {
-  constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
+export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatasourceOptions> {
+  constructor(instanceSettings: DataSourceInstanceSettings<ZendeskDatasourceOptions>) {
     super(instanceSettings);
   }
 
-  getDefaultQuery(app: CoreApp): Partial<MyQuery> {
+  getDefaultQuery(app: CoreApp): Partial<ZendeskQuery> {
     return { status: ["new"] };
   }
 }

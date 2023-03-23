@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
-import { MyDataSourceOptions, MyQuery } from '../types';
+import { ZendeskDatasourceOptions, ZendeskQuery } from '../types';
 import { Button, HorizontalGroup, Input, Label } from '@grafana/ui';
 
-type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
+type Props = QueryEditorProps<DataSource, ZendeskQuery, ZendeskDatasourceOptions>;
 
 export class QueryEditor extends PureComponent<Props> {
   
