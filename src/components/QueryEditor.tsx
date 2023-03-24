@@ -47,7 +47,6 @@ export class QueryEditor extends PureComponent<Props> {
     this.props.onChange({ ...this.props.query, tags: value.replace(' ', '').split(',') })
   }
 
-
   render() {
     return (
       <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
