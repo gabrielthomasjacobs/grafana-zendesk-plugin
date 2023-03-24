@@ -8,8 +8,8 @@ type Props = QueryEditorProps<DataSource, ZendeskQuery, ZendeskDatasourceOptions
 
 export class QueryEditor extends PureComponent<Props> {
   
-  statusFilters: Record<string, boolean> = { new: true, open: true, hold: true, pending: true, solved: true };
-  priorityFilters: Record<string, boolean> = { low: true, normal: false, high: false, urgent: false };
+  statusFilters: Record<string, boolean> = { new: false, open: false, hold: false, pending: false, solved: false };
+  priorityFilters: Record<string, boolean> = { low: false, normal: false, high: false, urgent: false };
 
   constructor(props: Props) {
     super(props);
