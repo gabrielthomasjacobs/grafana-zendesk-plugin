@@ -122,12 +122,18 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		q := req.URL.Query()
 
 		outstrings := make([]string, 0)
-		for _, status := range input.Status {
-			outstrings = append(outstrings, "status:"+status)
+		// for _, status := range input.Status {}
+
+		for key, status := range input.Status {
+			if status == true {
+				outstrings = append(outstrings, "status:"+key)
+			}
 		}
 
-		for _, priority := range input.Priority {
-			outstrings = append(outstrings, "priority:"+priority)
+		for key, priority := range input.Priority {
+			if priority == true {
+				outstrings = append(outstrings, "priority:"+key)
+			}
 		}
 
 		for _, tag := range input.Tags {

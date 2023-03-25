@@ -9,6 +9,6 @@ export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatas
   }
 
   getDefaultQuery(app: CoreApp): Partial<ZendeskQuery> {
-    return { status: ["new"] };
+    return { status: {new: true} };
   }
 }
