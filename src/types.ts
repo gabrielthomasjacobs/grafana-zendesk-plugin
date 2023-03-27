@@ -8,7 +8,7 @@ export interface ZendeskQuery extends DataQuery {
 }
 
 export const defaultQuery: Pick<ZendeskQuery, "status" | "priority" | "tags"> = {
-  status: { new: true, open: true, pending: true, hold: true, solved: true, closed: true },
+  status: { new: true, open: true, pending: true, hold: true, solved: true },
   priority: { low: true, normal: true, high: true, urgent: true },
   tags: [],
 }

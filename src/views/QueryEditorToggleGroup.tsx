@@ -1,4 +1,4 @@
-import { HorizontalGroup, Label, Button } from '@grafana/ui';
+import { HorizontalGroup, InlineField, FilterPill } from '@grafana/ui';
 import React from 'react';
 
 type toggleGroupValues = {[key: string]: boolean}
@@ -13,19 +13,20 @@ type Props = {
 
 export function CreateToggleGroup(props: Props) {
   return(
-    <HorizontalGroup>
-      <Label>{props.label}</Label>
-      { Object.keys(props.value).map((option, index) => (
-        <Button
+    <InlineField label={props.label}>
+      <HorizontalGroup>
+        { Object.keys(props.value).map((option, index) => (
+        <FilterPill
+          selected={props.value[option]}
+          label={option}
           key={index}
           onClick={() => {
             let update: {[key: string]: boolean} = { ...props.value };
             update[option] = !update[option];
             props.onChange(props.queryKey, update)
-          }}
-          style={ (props.value[option]) ? { backgroundColor: '#2196f3', color: 'white' } : {backgroundColor: 'gray', color: 'white' }}>
-            {option}</Button>
+          }} />
       )) }
-    </HorizontalGroup>
+      </HorizontalGroup>
+    </InlineField>
   )
 };
