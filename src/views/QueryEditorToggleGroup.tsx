@@ -15,9 +15,9 @@ export function CreateToggleGroup(props: Props) {
   return(
     <InlineField label={props.label}>
       <HorizontalGroup>
-        { Object.keys(props.value).map((option, index) => (
+        { Object.keys(props.availableValues).map((option, index) => (
         <FilterPill
-          selected={props.value[option]}
+          selected={props.value?.[option] || false}
           label={option}
           key={index}
           onClick={() => {

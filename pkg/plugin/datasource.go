@@ -145,6 +145,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		q.Add("query", out)
 		q.Add("sort_by", "updated_at")
 		req.URL.RawQuery = q.Encode()
+		req.Header.Set("Accept", "application/json")
 	}
 	resp, err := d.httpClient.Do(req)
 	switch {

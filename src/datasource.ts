@@ -2,6 +2,7 @@ import { CoreApp, DataSourceInstanceSettings } from '@grafana/data';
 
 import { ZendeskQuery, ZendeskDatasourceOptions } from './types';
 import { DataSourceWithBackend } from '@grafana/runtime';
+import { ticketQueryPresets } from 'views/QueryPresets';
 
 export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatasourceOptions> {
   constructor(instanceSettings: DataSourceInstanceSettings<ZendeskDatasourceOptions>) {
@@ -9,6 +10,6 @@ export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatas
   }
 
   getDefaultQuery(app: CoreApp): Partial<ZendeskQuery> {
-    return { status: {new: true} };
+    return ticketQueryPresets[0].setValue;
   }
 }
