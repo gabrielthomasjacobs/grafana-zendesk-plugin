@@ -137,7 +137,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		}
 
 		for _, tag := range input.Tags {
-			outstrings = append(outstrings, "tag:"+tag)
+			outstrings = append(outstrings, "tags:"+tag)
 		}
 
 		out := strings.Join(outstrings, ` `)

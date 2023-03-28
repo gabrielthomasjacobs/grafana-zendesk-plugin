@@ -11,7 +11,7 @@ function QueryEditor(props: Props) {
   const [currentTab, setCurrentTab] = useState('tickets');
   const tabs = [
     {label: 'Tickets', active: currentTab === 'tickets', onChangeTab: () => setCurrentTab('tickets')},
-    {label: 'Sales', active: currentTab === 'sales', onChangeTab: () => setCurrentTab('sales')},
+    // {label: 'Sales', active: currentTab === 'sales', onChangeTab: () => setCurrentTab('sales')},
   ];
 
   const handleTabQueryChange = (update: ZendeskQuery) => {
@@ -36,7 +36,7 @@ function QueryEditor(props: Props) {
       </TabsBar>
       <TabContent>
         {tabs[0].active && <QueryEditorTicketsTab {...props} onChange={handleTabQueryChange}/>}
-        {tabs[1].active && <div>Second tab content</div>}
+        {/* {tabs[1].active && <div>Second tab content</div>} */}
       </TabContent>
     </div>
   );
