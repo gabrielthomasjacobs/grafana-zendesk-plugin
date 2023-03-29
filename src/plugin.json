@@ -7,17 +7,32 @@
   "backend": true,
   "executable": "gpx_zendesk",
   "info": {
-    "description": "Adds Zendesk integration",
+    "description": "A datasource plugin to add Zendesk integration",
     "author": {
-      "name": "Gabrielthomasjacobs"
+      "name": "Gabrielthomasjacobs",
+      "url": "https://github.com/gabrielthomasjacobs"
     },
     "keywords": ["datasource"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
     },
-    "links": [],
-    "screenshots": [],
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/gabrielthomasjacobs/grafana-zendesk-plugin"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/gabrielthomasjacobs/grafana-zendesk-plugin/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "Zendesk Datasource Plugin",
+        "path": "img/screenshot_1.png"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
