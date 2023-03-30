@@ -49,13 +49,17 @@ type apiTicket struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type toggleGroup struct {
-}
+// type SelectableQueryRow struct {
+// 	selectedKeyword   string
+// 	availableKeywords []string
+// 	operator          string
+// 	terms             []string
+// 	availableTerms    []string
+// 	uniqueId          string
+// 	querystring       string
+// }
 
 type apiQuery struct {
-	TicketType string          `json:"type"`
-	Status     map[string]bool `json:"status"`
-	Priority   map[string]bool `json:"priority"`
-	Tags       []string        `json:"tags"`
-	Created    string          `json:"created_at"`
+	QueryString string `json:"querystring"`
+	// Filters     []SelectableQueryRow `json:"filters"`
 }
