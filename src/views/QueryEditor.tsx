@@ -7,7 +7,7 @@ import { Tab, TabContent, TabsBar } from '@grafana/ui';
 type Props = QueryEditorProps<DataSource, ZendeskQuery, ZendeskDatasourceOptions>;
 
 function QueryEditor(props: Props) {
-  const [query, setQuery] = useState(props.query);
+  console.log(props)
   const [currentTab, setCurrentTab] = useState('tickets');
   const tabs = [
     {label: 'Tickets', active: currentTab === 'tickets', onChangeTab: () => setCurrentTab('tickets')},
@@ -15,9 +15,7 @@ function QueryEditor(props: Props) {
   ];
 
   const handleTabQueryChange = (update: ZendeskQuery) => {
-    const newQuery = { ...query, ...update}
-    setQuery(newQuery)
-    props.onChange(newQuery)
+    props.onChange({...props.query, ...update})
   }
 
   return (
@@ -35,7 +33,10 @@ function QueryEditor(props: Props) {
         })}
       </TabsBar>
       <TabContent>
-        {tabs[0].active && <QueryEditorTicketsTab {...props} onChange={handleTabQueryChange}/>}
+        {tabs[0].active && 
+          <QueryEditorTicketsTab 
+            query={props.query}
+            onChange={handleTabQueryChange}/>}
         {/* {tabs[1].active && <div>Second tab content</div>} */}
       </TabContent>
     </div>

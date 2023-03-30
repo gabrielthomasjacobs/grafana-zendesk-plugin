@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
@@ -121,28 +120,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		}
 		q := req.URL.Query()
 
-		outstrings := make([]string, 0)
-		// for _, status := range input.Status {}
-
-		for key, status := range input.Status {
-			if status == true {
-				outstrings = append(outstrings, "status:"+key)
-			}
-		}
-
-		for key, priority := range input.Priority {
-			if priority == true {
-				outstrings = append(outstrings, "priority:"+key)
-			}
-		}
-
-		for _, tag := range input.Tags {
-			outstrings = append(outstrings, "tags:"+tag)
-		}
-
-		out := strings.Join(outstrings, ` `)
-
-		q.Add("query", out)
+		q.Add("query", input.QueryString)
 		q.Add("sort_by", "updated_at")
 		req.URL.RawQuery = q.Encode()
 		req.Header.Set("Accept", "application/json")
