@@ -1,0 +1,24 @@
+{
+  "result": [
+    {
+      "label": "Incident",
+      "used": false,
+      "reference": false,
+      "rawLabel": "Incident",
+      "selected": false,
+      "missing": false,
+      "image": "",
+      "value": "incident"
+    },
+    {
+      "label": "Foo",
+      "used": false,
+      "reference": false,
+      "rawLabel": "Foo",
+      "selected": false,
+      "missing": false,
+      "image": "",
+      "value": "foo"
+    }
+  ]
+}
