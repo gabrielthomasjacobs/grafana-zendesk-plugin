@@ -29,7 +29,9 @@ func TestFetchTickets(t *testing.T) {
 		client: cl,
 	}
 
-	query := backend.DataQuery{}
+	query := backend.DataQuery{
+		JSON: []byte("{}"),
+	}
 	resp, err := a.FetchTickets(context.Background(), query)
 	tickets := resp["result"]
 

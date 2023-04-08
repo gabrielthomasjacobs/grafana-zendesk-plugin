@@ -1,0 +1,128 @@
+//  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] 
+//  Name: tickets
+//  Dimensions: 8 Fields by 2 Rows
+//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
+//  | Name: image     | Name: label     | Name: missing | Name: rawLabel  | Name: reference | Name: selected | Name: used    | Name: value     |
+//  | Labels:         | Labels:         | Labels:       | Labels:         | Labels:         | Labels:        | Labels:       | Labels:         |
+//  | Type: []*string | Type: []*string | Type: []*bool | Type: []*string | Type: []*bool   | Type: []*bool  | Type: []*bool | Type: []*string |
+//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
+//  |                 | Incident        | false         | Incident        | false           | false          | false         | incident        |
+//  |                 | Foo             | false         | Foo             | false           | false          | false         | foo             |
+//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
+//  
+//  
+//  🌟 This was machine generated.  Do not edit. 🌟
+{
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "tickets",
+        "fields": [
+          {
+            "name": "image",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "missing",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "rawLabel",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "reference",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "selected",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "used",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            "",
+            ""
+          ],
+          [
+            "Incident",
+            "Foo"
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            "Incident",
+            "Foo"
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            "incident",
+            "foo"
+          ]
+        ]
+      }
+    }
+  ]
+}
