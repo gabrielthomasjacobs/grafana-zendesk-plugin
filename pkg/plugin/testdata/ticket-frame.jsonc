@@ -2,15 +2,21 @@
 //  
 //  Frame[0] 
 //  Name: tickets
-//  Dimensions: 8 Fields by 2 Rows
-//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
-//  | Name: image     | Name: label     | Name: missing | Name: rawLabel  | Name: reference | Name: selected | Name: used    | Name: value     |
-//  | Labels:         | Labels:         | Labels:       | Labels:         | Labels:         | Labels:        | Labels:       | Labels:         |
-//  | Type: []*string | Type: []*string | Type: []*bool | Type: []*string | Type: []*bool   | Type: []*bool  | Type: []*bool | Type: []*string |
-//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
-//  |                 | Incident        | false         | Incident        | false           | false          | false         | incident        |
-//  |                 | Foo             | false         | Foo             | false           | false          | false         | foo             |
-//  +-----------------+-----------------+---------------+-----------------+-----------------+----------------+---------------+-----------------+
+//  Dimensions: 26 Fields by 1 Rows
+//  +------------------+-------------------------------------------------------------------+------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-----------------------------+--------------------------------+----------------------------------+-------------------+-------------------------------+-------------------------------+
+//  | Name: ID         | Name: Url                                                         | Name: ExternalID | Name: Type      | Name: Subject                  | Name: RawSubject               | Name: Description                                                                                            | Name: Priority  | Name: Status    | Name: Recipient | Name: RequesterID  | Name: SubmitterID  | Name: AssigneeID   | Name: OrganizationID | Name: GroupID       | Name: ForumTopicID | Name: ProblemID  | Name: HasIncidents | Name: IsPublic | Name: DueAt                   | Name: SatisfactionRating.ID | Name: SatisfactionRating.Score | Name: SatisfactionRating.Comment | Name: Via.Channel | Name: CreatedAt               | Name: UpdatedAt               |
+//  | Labels:          | Labels:                                                           | Labels:          | Labels:         | Labels:                        | Labels:                        | Labels:                                                                                                      | Labels:         | Labels:         | Labels:         | Labels:            | Labels:            | Labels:            | Labels:              | Labels:             | Labels:            | Labels:          | Labels:            | Labels:        | Labels:                       | Labels:                     | Labels:                        | Labels:                          | Labels:           | Labels:                       | Labels:                       |
+//  | Type: []*float64 | Type: []*string                                                   | Type: []*string  | Type: []*string | Type: []*string                | Type: []*string                | Type: []*string                                                                                              | Type: []*string | Type: []*string | Type: []*string | Type: []*float64   | Type: []*float64   | Type: []*float64   | Type: []*float64     | Type: []*float64    | Type: []*float64   | Type: []*float64 | Type: []*bool      | Type: []*bool  | Type: []*time.Time            | Type: []*float64            | Type: []*string                | Type: []*string                  | Type: []*string   | Type: []*time.Time            | Type: []*time.Time            |
+//  +------------------+-------------------------------------------------------------------+------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-----------------------------+--------------------------------+----------------------------------+-------------------+-------------------------------+-------------------------------+
+//  | 1                | https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/1.json | null             | incident        | Sample ticket: Meet the ticket | Sample ticket: Meet the ticket | Hi there,                                                                                                    | urgent          | open            | null            | 1.374878017026e+13 | 1.374877013314e+13 | 1.374877013314e+13 | 0                    | 1.3748795208468e+13 | 0                  | 0                | false              | true           | 0001-01-01 00:00:00 +0000 UTC | 0                           |                                |                                  | sample_ticket     | 2023-03-07 19:42:03 +0000 UTC | 2023-03-24 17:40:42 +0000 UTC |
+//  |                  |                                                                   |                  |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                | I’m sending an email because I’m having a problem setting up your new product. Can you help me troubleshoot? |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                | Thanks,                                                                                                      |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                |  The Customer                                                                                                |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  |                  |                                                                   |                  |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                    |                  |                    |                |                               |                             |                                |                                  |                   |                               |                               |
+//  +------------------+-------------------------------------------------------------------+------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-----------------------------+--------------------------------+----------------------------------+-------------------+-------------------------------+-------------------------------+
 //  
 //  
 //  🌟 This was machine generated.  Do not edit. 🌟
@@ -22,7 +28,15 @@
         "name": "tickets",
         "fields": [
           {
-            "name": "image",
+            "name": "ID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Url",
             "type": "string",
             "typeInfo": {
               "frame": "string",
@@ -30,7 +44,7 @@
             }
           },
           {
-            "name": "label",
+            "name": "ExternalID",
             "type": "string",
             "typeInfo": {
               "frame": "string",
@@ -38,15 +52,7 @@
             }
           },
           {
-            "name": "missing",
-            "type": "boolean",
-            "typeInfo": {
-              "frame": "bool",
-              "nullable": true
-            }
-          },
-          {
-            "name": "rawLabel",
+            "name": "Type",
             "type": "string",
             "typeInfo": {
               "frame": "string",
@@ -54,34 +60,178 @@
             }
           },
           {
-            "name": "reference",
-            "type": "boolean",
-            "typeInfo": {
-              "frame": "bool",
-              "nullable": true
-            }
-          },
-          {
-            "name": "selected",
-            "type": "boolean",
-            "typeInfo": {
-              "frame": "bool",
-              "nullable": true
-            }
-          },
-          {
-            "name": "used",
-            "type": "boolean",
-            "typeInfo": {
-              "frame": "bool",
-              "nullable": true
-            }
-          },
-          {
-            "name": "value",
+            "name": "Subject",
             "type": "string",
             "typeInfo": {
               "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "RawSubject",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Description",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Priority",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Status",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Recipient",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "RequesterID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "SubmitterID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "AssigneeID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "OrganizationID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "GroupID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ForumTopicID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ProblemID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "HasIncidents",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "IsPublic",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "DueAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "SatisfactionRating.ID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "SatisfactionRating.Score",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "SatisfactionRating.Comment",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Via.Channel",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "CreatedAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "UpdatedAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
               "nullable": true
             }
           }
@@ -90,36 +240,82 @@
       "data": {
         "values": [
           [
-            "",
+            1
+          ],
+          [
+            "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/1.json"
+          ],
+          [
+            "null"
+          ],
+          [
+            "incident"
+          ],
+          [
+            "Sample ticket: Meet the ticket"
+          ],
+          [
+            "Sample ticket: Meet the ticket"
+          ],
+          [
+            "Hi there,\n\nI’m sending an email because I’m having a problem setting up your new product. Can you help me troubleshoot?\n\nThanks,\n The Customer\n\n"
+          ],
+          [
+            "urgent"
+          ],
+          [
+            "open"
+          ],
+          [
+            "null"
+          ],
+          [
+            13748780170260
+          ],
+          [
+            13748770133140
+          ],
+          [
+            13748770133140
+          ],
+          [
+            0
+          ],
+          [
+            13748795208468
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            false
+          ],
+          [
+            true
+          ],
+          [
+            -6795364578871
+          ],
+          [
+            0
+          ],
+          [
             ""
           ],
           [
-            "Incident",
-            "Foo"
+            ""
           ],
           [
-            false,
-            false
+            "sample_ticket"
           ],
           [
-            "Incident",
-            "Foo"
+            1678218123000
           ],
           [
-            false,
-            false
-          ],
-          [
-            false,
-            false
-          ],
-          [
-            false,
-            false
-          ],
-          [
-            "incident",
-            "foo"
+            1679679642000
           ]
         ]
       }

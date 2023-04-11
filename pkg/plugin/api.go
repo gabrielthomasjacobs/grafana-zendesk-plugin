@@ -15,14 +15,11 @@ import (
 type api struct {
 	client   *http.Client
 	settings backend.DataSourceInstanceSettings
-	query    backend.DataQuery
-	target   string
-	filters  map[string]string
 }
 
 type MapList map[string][]map[string]any
 
-func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) (MapList, error) {
+func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) ([]apiTicket, error) {
 
 	if len(query.JSON) == 0 {
 		return nil, errors.New("invalid request")
@@ -43,7 +40,7 @@ func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) (MapList
 	return a.fetch(ctx, q, "search", p)
 }
 
-func (a api) fetch(ctx context.Context, quety apiQuery, target string, params url.Values) (MapList, error) {
+func (a api) fetch(ctx context.Context, quety apiQuery, target string, params url.Values) ([]apiTicket, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, a.settings.URL+target, nil)
 	if err != nil {
 		return nil, fmt.Errorf("new request with context: %w", err)
@@ -53,13 +50,18 @@ func (a api) fetch(ctx context.Context, quety apiQuery, target string, params ur
 	req.Header.Set("Accept", "application/json")
 
 	resp, err := a.client.Do(req)
-
-	var body MapList
-	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return nil, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
+	if err != nil {
+		return nil, err
 	}
 
-	return body, nil
+	var body apiSearchResults
+	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
+		if len(body.TicketResults) == 0 {
+			return nil, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
+		}
+	}
+
+	return body.TicketResults, nil
 }
 
 func getQueryParam(input apiQuery) string {
