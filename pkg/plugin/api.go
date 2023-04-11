@@ -19,18 +19,16 @@ type api struct {
 	Filters  map[string]string
 }
 
-type MapList map[string][]map[string]any
-
-func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) (MapList, error) {
+func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) ([]apiTicket, error) {
 
 	if len(query.JSON) == 0 {
-		return nil, errors.New("invalid request")
+		return []apiTicket{}, errors.New("invalid request")
 	}
 
 	q := apiQuery{}
 	err := json.Unmarshal(query.JSON, &q)
 	if err != nil {
-		return nil, fmt.Errorf("unmarshal: %w", err)
+		return []apiTicket{}, fmt.Errorf("unmarshal: %w", err)
 	}
 
 	p := url.Values{}
@@ -40,10 +38,10 @@ func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) (MapList
 	return a.fetch(ctx, q, "search", p)
 }
 
-func (a api) fetch(ctx context.Context, query apiQuery, target string, params url.Values) (MapList, error) {
+func (a api) fetch(ctx context.Context, query apiQuery, target string, params url.Values) ([]apiTicket, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, a.Settings.URL+target, nil)
 	if err != nil {
-		return nil, fmt.Errorf("new request with context: %w", err)
+		return []apiTicket{}, fmt.Errorf("new request with context: %w", err)
 	}
 
 	req.URL.RawQuery = params.Encode()
@@ -51,13 +49,13 @@ func (a api) fetch(ctx context.Context, query apiQuery, target string, params ur
 
 	resp, err := a.Client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("error doing client request: %w", err)
+		return []apiTicket{}, fmt.Errorf("error doing client request: %w", err)
 	}
 
-	var body MapList
+	var body apiSearchResults
 	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return nil, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
+		return []apiTicket{}, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
 	}
 
-	return body, nil
+	return body.TicketResults, nil
 }

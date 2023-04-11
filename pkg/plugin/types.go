@@ -13,63 +13,61 @@ type apiSearchResults struct {
 
 // apiTicket is a single data point with a timestamp and a float value
 type apiTicket struct {
-	ID                   int       `json:"id"`
-	Url                  string    `json:"url"`
-	ExternalID           string    `json:"external_id"`
-	Type                 string    `json:"type"`
-	Subject              string    `json:"subject"`
-	RawSubject           string    `json:"raw_subject"`
-	Description          string    `json:"description"`
-	Priority             string    `json:"priority"`
-	Status               string    `json:"status"`
-	Recipient            string    `json:"recipient"`
-	RequesterID          int       `json:"requester_id"`
-	SubmitterID          int       `json:"submitter_id"`
-	AssigneeID           int       `json:"assignee_id"`
-	OrganizationID       int       `json:"organization_id"`
-	GroupID              int       `json:"group_id"`
-	CollaboratorIDs      []int     `json:"collaborator_ids"`
-	FollowerIds          []any     `json:"follower_ids"`
-	EmailCcIds           []any     `json:"email_cc_ids"`
-	SharingAgreementIds  []any     `json:"sharing_agreement_ids"`
-	CustomStatusID       int64     `json:"custom_status_id"`
-	Fields               []any     `json:"fields"`
-	FollowupIds          []any     `json:"followup_ids"`
-	TicketFormID         int64     `json:"ticket_form_id"`
-	BrandID              int64     `json:"brand_id"`
-	AllowChannelback     bool      `json:"allow_channelback"`
-	AllowAttachments     bool      `json:"allow_attachments"`
-	FromMessagingChannel bool      `json:"from_messaging_channel"`
-	ResultType           string    `json:"result_type"`
-	ForumTopicID         int       `json:"forum_topic_id"`
-	ProblemID            int       `json:"problem_id"`
-	HasIncidents         bool      `json:"has_incidents"`
-	IsPublic             bool      `json:"is_public"`
-	DueAt                time.Time `json:"due_at"`
-	Tags                 []string  `json:"tags"`
-	CustomFields         []struct {
-		ID    int    `json:"id"`
-		Value string `json:"value"`
-	} `json:"custom_fields"`
-	SatisfactionRating struct {
-		ID      int    `json:"id"`
-		Score   string `json:"score"`
-		Comment string `json:"comment"`
-	} `json:"satisfaction_rating"`
-	SharingAgreementIDs []int `json:"sharing_agreement_ids"`
-	FollowupIDs         []int `json:"followup_ids"`
-	Via                 struct {
-		Channel string `json:"channel"`
-		Source  struct {
-			From struct {
-			} `json:"from"`
-			To struct {
-			} `json:"to"`
-			Rel any `json:"rel"`
-		} `json:"source"`
-	} `json:"via"`
+	ID  float64 `json:"id"`
+	Url string  `json:"url,omitempty"`
+	// ExternalID     string  `json:"external_id,omitempty"`
+	Type           string  `json:"type,omitempty"`
+	Subject        string  `json:"subject,omitempty"`
+	RawSubject     string  `json:"raw_subject,omitempty"`
+	Description    string  `json:"description,omitempty"`
+	Priority       string  `json:"priority,omitempty"`
+	Status         string  `json:"status,omitempty"`
+	Recipient      string  `json:"recipient,omitempty"`
+	RequesterID    float64 `json:"requester_id,omitempty"`
+	SubmitterID    float64 `json:"submitter_id,omitempty"`
+	AssigneeID     float64 `json:"assignee_id,omitempty"`
+	OrganizationID float64 `json:"organization_id,omitempty"`
+	GroupID        float64 `json:"group_id,omitempty"`
+	// CollaboratorIDs      []int     `json:"collaborator_ids,omitempty"`
+	// FollowerIds          []any     `json:"follower_ids,omitempty"`
+	// EmailCcIds           []any     `json:"email_cc_ids,omitempty"`
+	// SharingAgreementIds  []any     `json:"sharing_agreement_ids,omitempty"`
+	CustomStatusID float64 `json:"custom_status_id,omitempty"`
+	// Fields               []any     `json:"fields,omitempty"`
+	// FollowupIds          []any     `json:"followup_ids,omitempty"`
+	TicketFormID         float64   `json:"ticket_form_id,omitempty"`
+	BrandID              float64   `json:"brand_id,omitempty"`
+	AllowChannelback     bool      `json:"allow_channelback,omitempty"`
+	AllowAttachments     bool      `json:"allow_attachments,omitempty"`
+	FromMessagingChannel bool      `json:"from_messaging_channel,omitempty"`
+	ResultType           string    `json:"result_type,omitempty"`
+	ForumTopicID         float64   `json:"forum_topic_id,omitempty"`
+	ProblemID            float64   `json:"problem_id,omitempty"`
+	HasIncidents         bool      `json:"has_incidents,omitempty"`
+	IsPublic             bool      `json:"is_public,omitempty"`
+	DueAt                time.Time `json:"due_at,omitempty"`
+	// Tags                 []string  `json:"tags,omitempty"`
+	// CustomFields         []struct {
+	// 	Value string `json:"value"`
+	// } `json:"custom_fields"`
+	// SatisfactionRating struct {
+	// 	Score   string `json:"score"`
+	// 	Comment string `json:"comment"`
+	// } `json:"satisfaction_rating"`
+	// SharingAgreementIDs []float64 `json:"sharing_agreement_ids"`
+	// FollowupIDs         []float64 `json:"followup_ids"`
+	// Via                 struct {
+	// 	Channel string `json:"channel"`
+	// 	Source  struct {
+	// 		From struct {
+	// 		} `json:"from"`
+	// 		To struct {
+	// 		} `json:"to"`
+	// 		Rel any `json:"rel"`
+	// 	} `json:"source"`
+	// } `json:"via"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
 // type SelectableQueryRow struct {

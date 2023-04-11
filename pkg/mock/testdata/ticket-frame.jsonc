@@ -1,5 +1,375 @@
 //  🌟 This was machine generated.  Do not edit. 🌟
+//  
+//  Frame[0] 
+//  Name: tickets
+//  Dimensions: 28 Fields by 2 Rows
+//  +------------------+-------------------------------------------------------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+----------------------+--------------------+---------------------+------------------------+------------------------+----------------------------+------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-------------------------------+-------------------------------+
+//  | Name: ID         | Name: Url                                                         | Name: Type      | Name: Subject                  | Name: RawSubject               | Name: Description                                                                                            | Name: Priority  | Name: Status    | Name: Recipient | Name: RequesterID  | Name: SubmitterID  | Name: AssigneeID   | Name: OrganizationID | Name: GroupID       | Name: CustomStatusID | Name: TicketFormID | Name: BrandID       | Name: AllowChannelback | Name: AllowAttachments | Name: FromMessagingChannel | Name: ResultType | Name: ForumTopicID | Name: ProblemID  | Name: HasIncidents | Name: IsPublic | Name: DueAt                   | Name: CreatedAt               | Name: UpdatedAt               |
+//  | Labels:          | Labels:                                                           | Labels:         | Labels:                        | Labels:                        | Labels:                                                                                                      | Labels:         | Labels:         | Labels:         | Labels:            | Labels:            | Labels:            | Labels:              | Labels:             | Labels:              | Labels:            | Labels:             | Labels:                | Labels:                | Labels:                    | Labels:          | Labels:            | Labels:          | Labels:            | Labels:        | Labels:                       | Labels:                       | Labels:                       |
+//  | Type: []*float64 | Type: []*string                                                   | Type: []*string | Type: []*string                | Type: []*string                | Type: []*string                                                                                              | Type: []*string | Type: []*string | Type: []*string | Type: []*float64   | Type: []*float64   | Type: []*float64   | Type: []*float64     | Type: []*float64    | Type: []*float64     | Type: []*float64   | Type: []*float64    | Type: []*bool          | Type: []*bool          | Type: []*bool              | Type: []*string  | Type: []*float64   | Type: []*float64 | Type: []*bool      | Type: []*bool  | Type: []*time.Time            | Type: []*time.Time            | Type: []*time.Time            |
+//  +------------------+-------------------------------------------------------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+----------------------+--------------------+---------------------+------------------------+------------------------+----------------------------+------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-------------------------------+-------------------------------+
+//  | 1                | https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/1.json | incident        | Sample ticket: Meet the ticket | Sample ticket: Meet the ticket | Hi there,                                                                                                    | urgent          | open            |                 | 1.374878017026e+13 | 1.374877013314e+13 | 1.374877013314e+13 | 0                    | 1.3748795208468e+13 | 1.3748770529684e+13  | 1.374875577154e+13 | 1.3748779814292e+13 | false                  | true                   | false                      | ticket           | 0                  | 0                | false              | true           | 0001-01-01 00:00:00 +0000 UTC | 2023-03-07 19:42:03 +0000 UTC | 2023-03-24 17:40:42 +0000 UTC |
+//  |                  |                                                                   |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                | I’m sending an email because I’m having a problem setting up your new product. Can you help me troubleshoot? |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                | Thanks,                                                                                                      |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                |  The Customer                                                                                                |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  |                  |                                                                   |                 |                                |                                |                                                                                                              |                 |                 |                 |                    |                    |                    |                      |                     |                      |                    |                     |                        |                        |                            |                  |                    |                  |                    |                |                               |                               |                               |
+//  | 3                | https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/3.json |                 | Yet another ticket             | Yet another ticket             | asdfadsf                                                                                                     |                 | open            |                 | 1.374877013314e+13 | 1.374877013314e+13 | 1.374877013314e+13 | 1.374876904002e+13   | 1.3748795208468e+13 | 1.3748770529684e+13  | 1.374875577154e+13 | 1.3748779814292e+13 | false                  | true                   | false                      | ticket           | 0                  | 0                | false              | true           | 0001-01-01 00:00:00 +0000 UTC | 2023-03-08 21:44:33 +0000 UTC | 2023-03-27 23:25:05 +0000 UTC |
+//  +------------------+-------------------------------------------------------------------+-----------------+--------------------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------+-----------------+-----------------+--------------------+--------------------+--------------------+----------------------+---------------------+----------------------+--------------------+---------------------+------------------------+------------------------+----------------------------+------------------+--------------------+------------------+--------------------+----------------+-------------------------------+-------------------------------+-------------------------------+
+//  
+//  
 //  🌟 This was machine generated.  Do not edit. 🌟
 {
-  "status": 200
+  "status": 200,
+  "frames": [
+    {
+      "schema": {
+        "name": "tickets",
+        "fields": [
+          {
+            "name": "ID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Url",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Type",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Subject",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "RawSubject",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Description",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Priority",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Status",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "Recipient",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "RequesterID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "SubmitterID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "AssigneeID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "OrganizationID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "GroupID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "CustomStatusID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "TicketFormID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "BrandID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "AllowChannelback",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "AllowAttachments",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "FromMessagingChannel",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ResultType",
+            "type": "string",
+            "typeInfo": {
+              "frame": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ForumTopicID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "ProblemID",
+            "type": "number",
+            "typeInfo": {
+              "frame": "float64",
+              "nullable": true
+            }
+          },
+          {
+            "name": "HasIncidents",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "IsPublic",
+            "type": "boolean",
+            "typeInfo": {
+              "frame": "bool",
+              "nullable": true
+            }
+          },
+          {
+            "name": "DueAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "CreatedAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "UpdatedAt",
+            "type": "time",
+            "typeInfo": {
+              "frame": "time.Time",
+              "nullable": true
+            }
+          }
+        ]
+      },
+      "data": {
+        "values": [
+          [
+            1,
+            3
+          ],
+          [
+            "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/1.json",
+            "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/3.json"
+          ],
+          [
+            "incident",
+            ""
+          ],
+          [
+            "Sample ticket: Meet the ticket",
+            "Yet another ticket"
+          ],
+          [
+            "Sample ticket: Meet the ticket",
+            "Yet another ticket"
+          ],
+          [
+            "Hi there,\n\nI’m sending an email because I’m having a problem setting up your new product. Can you help me troubleshoot?\n\nThanks,\n The Customer\n\n",
+            "asdfadsf"
+          ],
+          [
+            "urgent",
+            ""
+          ],
+          [
+            "open",
+            "open"
+          ],
+          [
+            "",
+            ""
+          ],
+          [
+            13748780170260,
+            13748770133140
+          ],
+          [
+            13748770133140,
+            13748770133140
+          ],
+          [
+            13748770133140,
+            13748770133140
+          ],
+          [
+            0,
+            13748769040020
+          ],
+          [
+            13748795208468,
+            13748795208468
+          ],
+          [
+            13748770529684,
+            13748770529684
+          ],
+          [
+            13748755771540,
+            13748755771540
+          ],
+          [
+            13748779814292,
+            13748779814292
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            true,
+            true
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            "ticket",
+            "ticket"
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            false,
+            false
+          ],
+          [
+            true,
+            true
+          ],
+          [
+            -6795364578871,
+            -6795364578871
+          ],
+          [
+            1678218123000,
+            1678311873000
+          ],
+          [
+            1679679642000,
+            1679959505000
+          ]
+        ]
+      }
+    }
+  ]
 }

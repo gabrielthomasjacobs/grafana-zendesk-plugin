@@ -111,11 +111,13 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		Client:   d.httpClient,
 		Query:    query,
 	}
-	tickets, err := zendeskApi.FetchTickets(ctx, query)
+	apiResult, err := zendeskApi.FetchTickets(ctx, query)
+	tickets := apiResult
 	if err != nil {
 		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
 	}
+
 	fs, err := framestruct.ToDataFrames("Results", tickets)
 	if err != nil {
 		return backend.DataResponse{}, err
