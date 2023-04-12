@@ -6,14 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
+	"github.com/grafana/grafana-plugin-sdk-go/data/framestruct"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
-	"github.com/grafana/grafana-plugin-sdk-go/data"
 
 	"github.com/gabrielthomasjacobs/zendeskplugin/pkg/models"
 )
@@ -107,85 +106,26 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 }
 
 func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, query backend.DataQuery) (backend.DataResponse, error) {
-	// Do HTTP request
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, d.settings.URL+"search", nil)
+	zendeskApi := api{
+		Settings: d.settings,
+		Client:   d.httpClient,
+		Query:    query,
+	}
+	apiResult, err := zendeskApi.FetchTickets(ctx, query)
+	tickets := apiResult
 	if err != nil {
-		return backend.DataResponse{}, fmt.Errorf("new request with context: %w", err)
-	}
-	if len(query.JSON) > 0 {
-		input := &apiQuery{}
-		err = json.Unmarshal(query.JSON, input)
-		if err != nil {
-			return backend.DataResponse{}, fmt.Errorf("unmarshal: %w", err)
-		}
-		q := req.URL.Query()
-
-		q.Add("query", input.QueryString)
-		q.Add("sort_by", "updated_at")
-		req.URL.RawQuery = q.Encode()
-		req.Header.Set("Accept", "application/json")
-	}
-	resp, err := d.httpClient.Do(req)
-	switch {
-	case err == nil:
-		break
-	case errors.Is(err, context.DeadlineExceeded):
+		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
-	default:
-		return backend.DataResponse{}, fmt.Errorf("http client do: %w: %s", errRemoteRequest, err)
-	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.DefaultLogger.Error("query: failed to close response body", "err", err)
-		}
-	}()
-
-	// Make sure the response was successful
-	if resp.StatusCode != http.StatusOK {
-		return backend.DataResponse{}, fmt.Errorf("%w: expected 200 response, got %d", errRemoteResponse, resp.StatusCode)
 	}
 
-	// Decode response
-	var body apiSearchResults
-	if err := json.NewDecoder(resp.Body).Decode(&body); err != nil {
-		return backend.DataResponse{}, fmt.Errorf("%w: decode: %s", errRemoteRequest, err)
+	fs, err := framestruct.ToDataFrames("Results", tickets)
+	if err != nil {
+		return backend.DataResponse{}, err
 	}
-
-	// create a field map
-	type TimesValues struct {
-		times  []time.Time
-		values []float64
-	}
-
-	fields := make(map[string]*TimesValues)
-
-	appendTimesValues := func(key string, time time.Time, value float64) {
-		fields[key].times = append(fields[key].times, time)
-		fields[key].values = append(fields[key].values, value)
-	}
-
-	// loop over the results and add them to the fields map
-	// the key is the ticket status and the value is a struct with times and incrementing values
-	for _, p := range body.TicketResults {
-		if _, ok := fields[p.Status]; !ok {
-			fields[p.Status] = &TimesValues{times: []time.Time{query.TimeRange.From, p.UpdatedAt}, values: []float64{0, 1}}
-		} else {
-			previousValue := fields[p.Status].values[len(fields[p.Status].values)-1]
-			appendTimesValues(p.Status, p.UpdatedAt, previousValue+1)
-		}
-	}
-
-	// Generate frames from fields map and add each to the response
-	fieldFrames := []*data.Frame{}
-
-	for key, field := range fields {
-		frame := data.NewFrame("Tickets: ", data.NewField("time", nil, field.times), data.NewField(key, nil, field.values))
-		fieldFrames = append(fieldFrames, frame)
-	}
-
 	return backend.DataResponse{
-		Frames: fieldFrames,
-	}, nil
+		Frames: fs,
+		Error:  err,
+	}, err
 }
 
 // CheckHealth performs a request to the specified data source and returns an error if the HTTP handler did not return

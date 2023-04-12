@@ -1,0 +1,53 @@
+{
+  "results": [
+    {
+      "url": "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/1.json",
+      "id": 1,
+      "created_at": "2023-03-07T19:42:03Z",
+      "updated_at": "2023-03-24T17:40:42Z",
+      "type": "incident",
+      "subject": "Sample ticket: Meet the ticket",
+      "raw_subject": "Sample ticket: Meet the ticket",
+      "description": "Hi there,\n\nI’m sending an email because I’m having a problem setting up your new product. Can you help me troubleshoot?\n\nThanks,\n The Customer\n\n",
+      "priority": "urgent",
+      "status": "open",
+      "requester_id": 13748780170260,
+      "submitter_id": 13748770133140,
+      "assignee_id": 13748770133140,
+      "group_id": 13748795208468,
+      "has_incidents": false,
+      "is_public": true,
+      "custom_status_id": 13748770529684,
+      "ticket_form_id": 13748755771540,
+      "brand_id": 13748779814292,
+      "allow_channelback": false,
+      "allow_attachments": true,
+      "from_messaging_channel": false,
+      "result_type": "ticket"
+    },
+    {
+      "url": "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/3.json",
+      "id": 3,
+      "created_at": "2023-03-08T21:44:33Z",
+      "updated_at": "2023-03-27T23:25:05Z",
+      "subject": "Yet another ticket",
+      "raw_subject": "Yet another ticket",
+      "description": "asdfadsf",
+      "status": "open",
+      "requester_id": 13748770133140,
+      "submitter_id": 13748770133140,
+      "assignee_id": 13748770133140,
+      "organization_id": 13748769040020,
+      "group_id": 13748795208468,
+      "has_incidents": false,
+      "is_public": true,
+      "custom_status_id": 13748770529684,
+      "ticket_form_id": 13748755771540,
+      "brand_id": 13748779814292,
+      "allow_channelback": false,
+      "allow_attachments": true,
+      "from_messaging_channel": false,
+      "result_type": "ticket"
+    }
+  ]
+}
