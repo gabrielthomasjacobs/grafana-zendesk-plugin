@@ -7,7 +7,6 @@ import { Tab, TabContent, TabsBar } from '@grafana/ui';
 type Props = QueryEditorProps<DataSource, ZendeskQuery, ZendeskDatasourceOptions>;
 
 function QueryEditor(props: Props) {
-  console.log(props)
   const [currentTab, setCurrentTab] = useState('tickets');
   const tabs = [
     {label: 'Tickets', active: currentTab === 'tickets', onChangeTab: () => setCurrentTab('tickets')},

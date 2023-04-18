@@ -70,17 +70,6 @@ type apiTicket struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
-// type SelectableQueryRow struct {
-// 	selectedKeyword   string
-// 	availableKeywords []string
-// 	operator          string
-// 	terms             []string
-// 	availableTerms    []string
-// 	uniqueId          string
-// 	querystring       string
-// }
-
 type apiQuery struct {
 	QueryString string `json:"querystring"`
-	// Filters     []SelectableQueryRow `json:"filters"`
 }

@@ -48,14 +48,6 @@ func TestFetchTickets(t *testing.T) {
 
 	frame, err := framestruct.ToDataFrame("tickets", tickets)
 
-	func sliceConverter(s []string) (result interface{}, err error) {
-		return []string{s}, nil
-	}
-
-	framestruct.WithConverterFor("tags", func([]string) (result interface{}, err error) {
-		return []string{s}, nil
-	})(frame)
-
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()

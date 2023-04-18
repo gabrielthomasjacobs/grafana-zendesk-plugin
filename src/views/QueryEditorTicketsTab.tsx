@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { isFilterValid } from 'shared/Validator';
 import { SelectableQueryRow, ZendeskQuery } from 'types';
 import { QueryRowBuilder } from './QueryRowBuilder';
+import { formatQuery } from 'shared/QueryFormatter';
 
 function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: ZendeskQuery) => void}){
   const [filters, setFilters] = useState<SelectableQueryRow[]>(props.query.filters || []);
@@ -9,7 +10,7 @@ function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: Z
   const handleQueryInputChange = (rows: SelectableQueryRow[]) => {
     const joinedQueryString = rows
       .filter((row) => isFilterValid(row))
-      .map((row) => row.querystring)
+      .map((row) => formatQuery(row.selectedKeyword, row.operator, row.terms))
       .join(' ');
     setFilters(rows)
     const update = {...props.query, filters: rows, querystring: joinedQueryString};

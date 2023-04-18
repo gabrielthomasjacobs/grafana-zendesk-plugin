@@ -87,7 +87,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 		res, err := d.query(ctx, req.PluginContext, q)
 		switch {
 		case err == nil:
-			break
+			// do nothing
 		case errors.Is(err, context.DeadlineExceeded):
 			res = backend.ErrDataResponse(backend.StatusTimeout, "gateway timeout")
 		case errors.Is(err, errRemoteRequest):
