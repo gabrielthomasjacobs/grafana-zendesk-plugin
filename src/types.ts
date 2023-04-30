@@ -32,3 +32,32 @@ export const queryValueDefaults: Record<string, string[]> = {
   status: ['new', 'open', 'pending', 'hold', 'solved'],
   priority: ['low', 'normal', 'high', 'urgent'],
 }
+
+export type ZendeskField = {
+  id: number;
+  title: string;
+  type: string;
+  key: string;
+  description: string;
+  raw_title: string;
+  raw_description: string;
+  position: number;
+  active: boolean;
+  system: boolean;
+  regexp_for_validation: string;
+  created_at: string;
+  updated_at: string;
+  tag: string;
+  custom_field_options?: Array<{ name: string,  value: string}>;
+  system_field_options?: Array<{ name: string,  value: string}>;
+  custom_statuses?: Array<{ name: string,  value: string}>;
+  removable: boolean;
+  agent_description: string;
+  end_user_description: string;
+  url: string;
+  [key: string]: string | boolean | number | null | any[] | undefined;
+}
+
+export type ZendeskFieldQuery = {
+  ticket_fields: ZendeskField[];
+}

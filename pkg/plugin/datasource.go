@@ -75,15 +75,6 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 
 	// loop over queries and execute them individually.
 	for _, q := range req.Queries {
-		// if i%2 != 0 {
-		// 	// Just to demonstrate how to return an error with a custom status code.
-		// 	response.Responses[q.RefID] = backend.ErrDataResponse(
-		// 		backend.StatusBadRequest,
-		// 		fmt.Sprintf("user friendly error for query number %v, excluding any sensitive information", i+1),
-		// 	)
-		// 	continue
-		// }
-
 		res, err := d.query(ctx, req.PluginContext, q)
 		switch {
 		case err == nil:
@@ -112,13 +103,11 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		Query:    query,
 	}
 	apiResult, err := zendeskApi.FetchTickets(ctx, query)
-	tickets := apiResult
 	if err != nil {
 		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
 	}
-
-	fs, err := framestruct.ToDataFrames("Results", tickets)
+	fs, err := framestruct.ToDataFrames("Results", apiResult)
 	if err != nil {
 		return backend.DataResponse{}, err
 	}
