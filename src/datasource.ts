@@ -21,7 +21,7 @@ export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatas
   }
 
   applyTemplateVariables(query: ZendeskQuery, scopedVars: ScopedVars): Record<string, any> {
-    const metricapplyQuery = new ZendeskMetricApplyQuery(query, scopedVars);
+    const metricapplyQuery = new ZendeskMetricApplyQuery(query, scopedVars, this.instanceSettings.url);
     return metricapplyQuery.applyTemplateVariables();
   }
 
