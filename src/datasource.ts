@@ -16,12 +16,12 @@ export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatas
 
   async metricFindQuery(query: any, options?: any): Promise<MetricFindValue[]> {
     if (!query) { return Promise.resolve([]) }
-    const metricFindQuery = new ZendeskMetricFindQuery(query, this.instanceSettings.url);
+    const metricFindQuery = new ZendeskMetricFindQuery(query);
     return firstValueFrom(metricFindQuery.metricFieldQuery())
   }
 
   applyTemplateVariables(query: ZendeskQuery, scopedVars: ScopedVars): Record<string, any> {
-    const metricapplyQuery = new ZendeskMetricApplyQuery(query, scopedVars, this.instanceSettings.url);
+    const metricapplyQuery = new ZendeskMetricApplyQuery(query, scopedVars);
     return metricapplyQuery.applyTemplateVariables();
   }
 

@@ -1,35 +1,53 @@
 import { SelectableValue } from '@grafana/data';
 import { HorizontalGroup, IconButton, InlineField, InlineFieldRow, MultiSelect, Select } from '@grafana/ui';
-import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { formatQuery } from 'shared/QueryFormatter';
-import { SelectableQueryRow, QueryOperator, queryValueDefaults } from 'types';
+import { formatFieldnameForQuery, getFieldOptions } from 'shared/FieldUtils';
+import { SelectableQueryRow, QueryOperator, ZendeskField } from 'types';
 
 type Props = {
   row: SelectableQueryRow;
   uniqueID: string;
-  onChange: (row: SelectableQueryRow, action?: string) => void;
+  onChange: (row: SelectableQueryRow) => void;
   onDelete: (id: string) => void;
 }
 
 export function QueryRow(props: Props) {
-  const [availableKeywords, setAvailableKeywords] = useState<Array<SelectableValue<string>>>(props.row.availableKeywords.map(v => ({value: v, label: v})));
-  const [selectedKeyword, setSelectedKeyword] = useState<string>(props.row.selectedKeyword);
+  const [selectedField, setSelectedField] = useState<SelectableValue<string>>({
+    label: props.row.selectedField?.title,
+    value: formatFieldnameForQuery(props.row.selectedField),
+    description: props.row.selectedField?.description,
+    id: props.row.selectedField?.id,
+    options: getFieldOptions(props.row.selectedField)
+  });
+  
   const [operator, setOperator] = useState<QueryOperator>(props.row.operator);
-  const [availableTerms, setAvailableTerms] = useState<Array<SelectableValue<string>>>(props.row.availableTerms?.map(v => ({value: v, label: v})) || []);
-  const [terms, setTerms] = useState<string[]>(props.row.terms || []);
+  const [availableOptions, setAvailableOptions] = useState<Array<SelectableValue<string>>>([]);
+  const [terms, setTerms] =  useState<Array<SelectableValue<string>>>(props.row.terms.map(v => ({label: v, value: v})) || []);
 
   const operators = [':', '-', '>', '<', '>=', '<='].map(v => ({label: v, value: v}));
   const emit = () => {
-    const availableTerms: string[] = queryValueDefaults[selectedKeyword] || [];
-    if(selectedKeyword.trim() === '' || _.isEqual(props.row, { ...props.row, selectedKeyword, operator, terms, availableTerms })) {return};
-    const update = { ...props.row, selectedKeyword, operator, terms, availableTerms }
-    update.querystring = formatQuery(update.selectedKeyword, update.operator, update.terms);
+    const field: ZendeskField | undefined = props.row.zendeskFields?.find((field) => formatFieldnameForQuery(field) === selectedField?.value);
+    const update = { ...props.row,
+      selectedField: field,
+      operator,
+      terms: terms.filter(v => v.value !== '' && v.value !== undefined).map(v => v.value as string)
+    }
     props.onChange(update);
   }
 
-  useEffect(emit);
-  
+  const updateSelectedField = (fieldName: string) => {
+    const field = props.row.zendeskFields?.find((field) => formatFieldnameForQuery(field) === fieldName);
+    if(!field) { return; }
+    setSelectedField({label: field.title, value: formatFieldnameForQuery(field)});
+    setTerms([]);
+  }
+
+  useEffect(() => {
+    const field = props.row.zendeskFields?.find((field) => selectedField.value === formatFieldnameForQuery(field));
+    const newOptions = getFieldOptions(field).map(option => ({label: option.name, value: option.value}));
+    setAvailableOptions(newOptions);
+  }, [selectedField, props.row.zendeskFields])
+
   return (
     <HorizontalGroup>
       <InlineFieldRow>
@@ -41,49 +59,40 @@ export function QueryRow(props: Props) {
         </InlineField>
         <InlineField label="Field">
           <Select
-            options={availableKeywords}
-            value={selectedKeyword}
-            onChange={(v) => {
-              setSelectedKeyword(v.value as string || '');
-              setAvailableTerms(queryValueDefaults[v.value as string]?.map(v => ({label: v, value: v})) || []);
-            }}
-            allowCustomValue={true}
-            onCreateOption={(v) => {
-              if(v.trim() === '' || !v) {return};
-              const customValue: SelectableValue<string> = { value: v, label: v };
-              setAvailableKeywords([...availableKeywords, customValue]);
-              setSelectedKeyword(customValue.value as string);
-            }}
+            options={props.row.zendeskFields?.map((field) => ({
+                label: field.title || '' ,
+                value: formatFieldnameForQuery(field), 
+                description: field.description || ''
+              }))}
+            value={ selectedField }
+            onChange={(v) => { updateSelectedField(v.value || '') }}
+            onBlur={() => emit()}
+            allowCustomValue={false}
+            width={30}
           />
         </InlineField>
         <InlineField label="Operator">
           <Select
-            options={operators}
+            options={ operators }
             value={ operator }
-            onChange={
-              (selected) => {
-                setOperator(selected.value as QueryOperator || ':' as QueryOperator);
-              }
-            }
+            isSearchable={false}
+            onChange={(selected) => setOperator(selected.value as QueryOperator || ':' as QueryOperator)}
           />
         </InlineField>
         <InlineField label="Values" grow>
           <MultiSelect 
-            options={availableTerms}
+            options={availableOptions}
             value={terms}
-            onChange={(v) => {
-              setTerms(v.map(v => v.value as string));
-              emit();
-            }}
+            onChange={(t) => setTerms(t) }
+            onBlur={() => emit()}
             allowCustomValue={true}
             noOptionsMessage="Enter Custom Value"
             placeholder=''
             onCreateOption={(v) => {
               if(v.trim() === '' || !v) {return};
               const customValue: SelectableValue<string> = { value: v, label: v };
-              setAvailableTerms([...availableTerms, customValue]);
-              setTerms([...terms, customValue.value as string]);
-              emit();
+              setAvailableOptions([...availableOptions, customValue]);
+              setTerms(terms.concat(customValue));
             }}
           />
         </InlineField>

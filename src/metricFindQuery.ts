@@ -1,30 +1,32 @@
-import { MetricFindValue } from '@grafana/data';
+import { MetricFindValue, SelectableValue } from '@grafana/data';
 import { Observable, map } from 'rxjs'
 import { fetchFields } from 'shared/API';
+import { isFieldCustom } from 'shared/FieldUtils';
 import { ZendeskField} from 'types';
 
 export default class ZendeskMetricFindQuery {
-  baseURL; query;
-  constructor(query: string, baseURL?: string) {
-    this.baseURL = baseURL || '';
+  query;
+  constructor(query: SelectableValue) {
     this.query = query;
   }
 
-  matchFields = (fields: ZendeskField[]): ZendeskField[] => {
-    // return array of fields that match the query
-    // can add more logic here to match on other properties, like description
-    let matches = fields.filter(field => {
-      const lowerTitle = field.title.toLowerCase();
-      const lowerQuery = this.query.replace('^', '').toLowerCase();
-      return lowerTitle.includes(lowerQuery)
-    })
-
-    // if query starts with ^, only return custom fields
-    if(this.query.indexOf('^') === 0) {
-      matches = matches.filter(field => Object.keys(field).some(key => key.indexOf('custom_') > -1))
+  matchField = (fields: ZendeskField[]): ZendeskField => {
+    let matches = fields
+      .filter(field => field.system_field_options || isFieldCustom(field))
+      .filter(field => {
+        if(this.query.value.includes('custom_field_')) {
+          const id = this.query.value.replace('custom_field_', '');
+          return field.id === parseInt(id, 10);
+        }
+        if(this.query.value === 'status') {
+          return field.type === 'custom_status' || field.title.toLowerCase() === this.query.value.toLowerCase();
+        }
+        return field.title.toLowerCase() === this.query.value.toLowerCase();
+      })
+    if(matches.length > 1) {
+      return matches.filter(field => field.title === this.query.label)[0];
     }
-
-    return matches
+    return matches[0];
   }
 
   mapFieldToFindValue = (field?: ZendeskField): {options: any[]} => {
@@ -37,9 +39,9 @@ export default class ZendeskMetricFindQuery {
   }
 
   metricFieldQuery = (): Observable<MetricFindValue[]> => {
-    return fetchFields(this.baseURL)
+    return fetchFields()
       .pipe(
-        map(fields => this.matchFields(fields)[0]),
+        map(fields => this.matchField(fields)),
         map(field => this.mapFieldToFindValue(field)),
         map(def => def.options.map(option => ({text: option.name, value: option.value || option.name})))
       );

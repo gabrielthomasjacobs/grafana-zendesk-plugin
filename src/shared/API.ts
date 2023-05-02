@@ -1,20 +1,14 @@
-import { getBackendSrv } from '@grafana/runtime';
+import { getBackendSrv, getDataSourceSrv } from '@grafana/runtime';
 import { ZendeskField, ZendeskFieldQuery } from 'types';
 import { Observable, map } from 'rxjs'
 
-const storeField = (field: ZendeskField) => {
-  // store fields in local storage
-  // workaround to share field metadata between metricFindQuery and metricApplyQuery
-  window.sessionStorage.setItem(`zendesk_field_${field.title}`, JSON.stringify(field));
-}
-
-export const fetchFields = (baseURL: string): Observable<ZendeskField[]> => {
+export const fetchFields = (): Observable<ZendeskField[]> => {
+  const baseUrl = getDataSourceSrv().getInstanceSettings('Zendesk Datasource Plugin')?.url || '';
   return getBackendSrv()
     .fetch<ZendeskFieldQuery>({
-      url: `${baseURL}/ticket_fields/`,
+      url: `${baseUrl}/ticket_fields/`,
       method: 'GET'
     }).pipe(
-      map((response) => response.data.ticket_fields),
-      map(fields => fields.map(field => {storeField(field); return field}))
+      map((response) => response.data.ticket_fields)
     )
 };

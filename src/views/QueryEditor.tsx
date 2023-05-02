@@ -10,6 +10,7 @@ function QueryEditor(props: Props) {
   const [currentTab, setCurrentTab] = useState('tickets');
   const tabs = [
     {label: 'Tickets', active: currentTab === 'tickets', onChangeTab: () => setCurrentTab('tickets')},
+    // allow for other tabs in the future, e.g.:
     // {label: 'Sales', active: currentTab === 'sales', onChangeTab: () => setCurrentTab('sales')}
   ];
 

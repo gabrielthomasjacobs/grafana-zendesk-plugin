@@ -45,3 +45,4 @@ e2e-results/
 .idea
 
 .eslintcache
+.vscode/*
