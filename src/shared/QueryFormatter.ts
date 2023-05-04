@@ -6,6 +6,10 @@ export function formatQuery(field: string, operator: QueryOperator, values: stri
   if(!values || values.length === 0) { return '' };
   const shouldNegate = operator === '-';
   if(shouldNegate) { operator = ':' };
+  if(values.find(v => v.indexOf('$') === 0)) {
+    // if any of the values are a variable, simply return $field
+    return `$${field}`
+  }
   let queryString = values.map(v => 
       `${shouldNegate ? '-':''}${field}${operator}${v}`
     ).join(' ');

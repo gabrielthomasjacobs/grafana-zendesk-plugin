@@ -45,8 +45,8 @@ export function QueryRow(props: Props) {
   useEffect(() => {
     const field = props.row.zendeskFields?.find((field) => selectedField.value === formatFieldnameForQuery(field));
     const newOptions = getFieldOptions(field).map(option => ({label: option.name, value: option.value}));
-    setAvailableOptions(newOptions);
-  }, [selectedField, props.row.zendeskFields])
+    setAvailableOptions([...newOptions, ...props.row.terms.map(v => ({label: v, value: v}))]);
+  }, [selectedField, props.row.zendeskFields, props.row.terms])
 
   return (
     <HorizontalGroup>

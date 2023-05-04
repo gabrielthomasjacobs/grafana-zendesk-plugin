@@ -37,16 +37,8 @@ export class ZendeskMetricApplyQuery {
 
   applyTemplateVariables(): ZendeskQuery {
     this.setScopedVars();
-    const fields  = Object.keys(this.getFormattedVariables());
     let querystring = this.query.querystring;
-    fields.forEach((fieldName: string) => {
-      // for each template variable field, 
-      // remove any existing instances of the field from the querystring then re-add the dynamic filter for that field
-      querystring = querystring.replace(new RegExp(`${fieldName}:[^ ]+`, 'g'), '');
-      querystring += ` $${fieldName}`
-    })
     const updatedQuerystring = getTemplateSrv().replace(querystring, this.scopedVars)
-  
     const updatedQuery = cloneDeep(this.query);
     updatedQuery.querystring = updatedQuerystring;
     return updatedQuery;
