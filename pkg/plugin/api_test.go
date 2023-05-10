@@ -14,7 +14,13 @@ import (
 )
 
 func TestFetchTickets(t *testing.T) {
-	settings := backend.DataSourceInstanceSettings{}
+	settings := backend.DataSourceInstanceSettings{
+		BasicAuthEnabled: true,
+		BasicAuthUser:    "fooUser",
+		DecryptedSecureJSONData: map[string]string{
+			"basicAuthPassword": "fooPassword",
+		},
+	}
 	opts, err := settings.HTTPClientOptions()
 	if err != nil {
 		t.Fail()
@@ -35,7 +41,8 @@ func TestFetchTickets(t *testing.T) {
 	}
 	cl.Transport = mock.NewMockTransport(routes, "./testdata")
 	a := api{
-		Client: cl,
+		Client:   cl,
+		Settings: settings,
 	}
 
 	query := backend.DataQuery{
