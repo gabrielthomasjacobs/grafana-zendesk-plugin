@@ -1,14 +1,17 @@
 import { getBackendSrv, getDataSourceSrv } from '@grafana/runtime';
-import { ZendeskField, ZendeskFieldQuery } from 'types';
+import { ZendeskField } from 'types';
 import { Observable, map } from 'rxjs'
 
 export const fetchFields = (): Observable<ZendeskField[]> => {
-  const baseUrl = getDataSourceSrv().getInstanceSettings('Zendesk Datasource Plugin')?.url || '';
-  return getBackendSrv()
-    .fetch<ZendeskFieldQuery>({
-      url: `${baseUrl}/ticket_fields/`,
-      method: 'GET'
-    }).pipe(
-      map((response) => response.data.ticket_fields)
-    )
+  const id = getDataSourceSrv().getInstanceSettings('Zendesk Datasource Plugin')?.id;
+
+  return getBackendSrv().fetch({
+    url: `/api/datasources/${id}/resources/ticket_fields`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  }).pipe(
+    map((response: any) => response.data.ticket_fields)
+  );
 };

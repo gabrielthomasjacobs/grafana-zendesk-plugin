@@ -1,7 +1,7 @@
 import { SelectableValue } from '@grafana/data';
 import { HorizontalGroup, IconButton, InlineField, InlineFieldRow, MultiSelect, Select } from '@grafana/ui';
 import React, { useEffect, useState } from 'react';
-import { formatFieldnameForQuery, getFieldOptions } from 'shared/FieldUtils';
+import { formatFieldNameForQuery, getFieldOptions } from 'shared/FieldUtils';
 import { SelectableQueryRow, QueryOperator, ZendeskField } from 'types';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 export function QueryRow(props: Props) {
   const [selectedField, setSelectedField] = useState<SelectableValue<string>>({
     label: props.row.selectedField?.title,
-    value: formatFieldnameForQuery(props.row.selectedField),
+    value: formatFieldNameForQuery(props.row.selectedField),
     description: props.row.selectedField?.description,
     id: props.row.selectedField?.id,
     options: getFieldOptions(props.row.selectedField)
@@ -26,7 +26,7 @@ export function QueryRow(props: Props) {
 
   const operators = [':', '-', '>', '<', '>=', '<='].map(v => ({label: v, value: v}));
   const emit = () => {
-    const field: ZendeskField | undefined = props.row.zendeskFields?.find((field) => formatFieldnameForQuery(field) === selectedField?.value);
+    const field: ZendeskField | undefined = props.row.zendeskFields?.find((field) => formatFieldNameForQuery(field) === selectedField?.value);
     const update = { ...props.row,
       selectedField: field,
       operator,
@@ -36,14 +36,14 @@ export function QueryRow(props: Props) {
   }
 
   const updateSelectedField = (fieldName: string) => {
-    const field = props.row.zendeskFields?.find((field) => formatFieldnameForQuery(field) === fieldName);
+    const field = props.row.zendeskFields?.find((field) => formatFieldNameForQuery(field) === fieldName);
     if(!field) { return; }
-    setSelectedField({label: field.title, value: formatFieldnameForQuery(field)});
+    setSelectedField({label: field.title, value: formatFieldNameForQuery(field)});
     setTerms([]);
   }
 
   useEffect(() => {
-    const field = props.row.zendeskFields?.find((field) => selectedField.value === formatFieldnameForQuery(field));
+    const field = props.row.zendeskFields?.find((field) => selectedField.value === formatFieldNameForQuery(field));
     const newOptions = getFieldOptions(field).map(option => ({label: option.name, value: option.value}));
     setAvailableOptions([...newOptions, ...props.row.terms.map(v => ({label: v, value: v}))]);
   }, [selectedField, props.row.zendeskFields, props.row.terms])
@@ -61,7 +61,7 @@ export function QueryRow(props: Props) {
           <Select
             options={props.row.zendeskFields?.map((field) => ({
                 label: field.title || '' ,
-                value: formatFieldnameForQuery(field), 
+                value: formatFieldNameForQuery(field), 
                 description: field.description || ''
               }))}
             value={ selectedField }

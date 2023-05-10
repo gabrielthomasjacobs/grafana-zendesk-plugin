@@ -5,7 +5,7 @@ import { QueryRowBuilder } from './QueryRowBuilder';
 import { formatQuery } from 'shared/QueryFormatter';
 import { fetchFields } from 'shared/API';
 import { firstValueFrom } from 'rxjs';
-import { formatFieldnameForQuery } from 'shared/FieldUtils';
+import { formatFieldNameForQuery } from 'shared/FieldUtils';
 
 function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: ZendeskQuery) => void}){
   const [filters, setFilters] = useState<SelectableQueryRow[]>(props.query.filters || undefined);
@@ -23,7 +23,7 @@ function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: Z
     const joinedQueryString = rows
       .filter((row) => isFilterValid(row))
       .map((row) => {
-        const formattedFieldName = formatFieldnameForQuery(row.selectedField);
+        const formattedFieldName = formatFieldNameForQuery(row.selectedField);
         if(!formattedFieldName) {return ''};
         return formatQuery(formattedFieldName, row.operator, row.terms)
       })

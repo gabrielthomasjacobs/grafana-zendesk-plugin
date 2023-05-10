@@ -5,9 +5,11 @@ import { fetchFields } from 'shared/API';
 import { firstValueFrom } from 'rxjs';
 import { isFieldCustom } from 'shared/FieldUtils';
 
+type SelectableField = {label: string, value: string, description: string};
+
 interface VariableQueryProps {
-  query: SelectableValue<any>;
-  onChange: (query: SelectableValue<any>, definition: string) => void;
+  query: SelectableValue<SelectableField>;
+  onChange: (query: SelectableValue<SelectableField>, definition: string) => void;
 }
 
 export const VariableQueryEditor = ({ onChange, query }: VariableQueryProps) => {
@@ -36,7 +38,7 @@ export const VariableQueryEditor = ({ onChange, query }: VariableQueryProps) => 
     fetchAvailableFields().catch((e) => console.error(e));
   }, [])
 
-  const handleChange = (selection: SelectableValue<any>) =>{
+  const handleChange = (selection: SelectableValue<SelectableField>) =>{
     setState(selection)
     onChange(selection, `${selection.label}`)
   };

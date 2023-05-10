@@ -1,4 +1,4 @@
-import { ScopedVars } from '@grafana/data';
+import { QueryVariableModel, ScopedVars } from '@grafana/data';
 import { getTemplateSrv } from '@grafana/runtime';
 import { cloneDeep } from 'lodash';
 import { ZendeskQuery } from 'types';
@@ -9,13 +9,13 @@ export class ZendeskMetricApplyQuery {
   scopedVars;
   constructor(query: ZendeskQuery, scopedVars?: ScopedVars) {
     this.query = query;    
-    this.variables = getTemplateSrv().getVariables();
+    this.variables = getTemplateSrv().getVariables() as QueryVariableModel[];
     this.scopedVars = scopedVars;
   }
 
   getFormattedVariables(): Record<string, string[]> {
     const entries = this.variables.map(
-      (v: any) => {
+      (v) => {
         const varName = v.query.value;
         const value = Array.isArray(v.current.value) ? v.current.value : [v.current.value];
         return [varName, value]

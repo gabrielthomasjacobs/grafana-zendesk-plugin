@@ -46,3 +46,4 @@ e2e-results/
 
 .eslintcache
 .vscode/*
+pkg/__debug_bin

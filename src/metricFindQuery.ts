@@ -29,11 +29,11 @@ export default class ZendeskMetricFindQuery {
     return matches[0];
   }
 
-  mapFieldToFindValue = (field?: ZendeskField): {options: any[]} => {
+  mapFieldToFindValue = (field?: ZendeskField): {options: Array<{name: string, value: string}>} => {
     if(!field) { return {options: []} };
     if(field.type === 'tagger') { return ({options: field.custom_field_options || []})  }
     if(field.type === 'custom_status') { 
-      return ({options: field.custom_statuses?.map((v: any) => ({name: v.agent_label, value: v.status_category})) || []})
+      return ({options: field.custom_statuses?.map((v: {agent_label: string, status_category: string}) => ({name: v.agent_label, value: v.status_category})) || []})
     }
     return ({options: field.system_field_options || []}) || ({options: []})
   }
