@@ -3,8 +3,8 @@
 Adds Zendesk Integration
 
 ## Features
-- Visualize ticket count by status
-- Query on status, priority, and tags
+- Visualize ticket volume or details
+- Query on any field in your organization's Zendesk instance
 
 ## Getting Started
 
@@ -22,6 +22,8 @@ e.g.:
 >password: footoken12345
 
 ## Recommended Visualization Options:
-- style: step-after
-- min: 0
-- decimals: 0
+- visualization type: Stat
+- Calculation: Count
+- Fields: Numeric Fields
+
+Finally, use the "Organize Fields" transform to hide unwanted fields or to re-order the fields for Table Visualizations.
