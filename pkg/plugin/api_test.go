@@ -67,6 +67,4 @@ func TestFetchTickets(t *testing.T) {
 	}
 
 	experimental.CheckGoldenJSONResponse(t, "../mock/testdata", "ticket-frame", &res, true)
-	fmt.Println("result: ")
-	fmt.Println(res)
 }

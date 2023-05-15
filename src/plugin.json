@@ -29,8 +29,16 @@
     ],
     "screenshots": [
       {
-        "name": "Zendesk Datasource Plugin",
-        "path": "img/screenshot_1.png"
+        "name": "Editing a Panel",
+        "path": "img/edit_panel.png"
+      },
+      {
+        "name": "Adding a Filter",
+        "path": "img/new_filter.png"
+      },
+      {
+        "name": "Setting a Filter Value",
+        "path": "img/filter_value.png"
       }
     ],
     "version": "%VERSION%",
