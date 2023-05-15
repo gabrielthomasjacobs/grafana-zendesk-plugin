@@ -2,7 +2,6 @@ package mock
 
 import (
 	"net/http"
-	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -30,10 +29,6 @@ func NewMockTransport(routes map[string]string, dataFolder string) http.RoundTri
 }
 
 func basePath() string {
-	mockSource, present := os.LookupEnv("GRAFANA_ZENDESK_MOCK_SOURCE")
-	if present && mockSource == "local_mock" {
-		return filepath.Dir("/mock/grafana-zendesk-datasource/")
-	}
 	_, b, _, _ := runtime.Caller(0)
 	return filepath.Dir(b)
 }
