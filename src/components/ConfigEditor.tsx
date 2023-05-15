@@ -11,7 +11,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   render() {
     const { options } = this.props;
     options.url ||= "https://yourSubdomain.zendesk.com/api/v2/"
-    options.basicAuthUser ||= "you@yourCompany.com/token"
+    options.basicAuthUser ||= "you@yourOrg.com/token"
     options.basicAuth ||= true;
     
     return (

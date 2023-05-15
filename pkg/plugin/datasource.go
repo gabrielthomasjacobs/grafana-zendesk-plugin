@@ -2,19 +2,15 @@ package plugin
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 
-	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data/framestruct"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
-
-	"github.com/gabrielthomasjacobs/zendeskplugin/pkg/models"
 )
 
 // Make sure Datasource implements required interfaces. This is important to do
@@ -39,9 +35,9 @@ func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.In
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
-	cl, err := httpclient.New(opts)
-	if err != nil {
-		return nil, fmt.Errorf("httpclient new: %w", err)
+	cl := http.Client{
+		Transport: http.DefaultTransport,
+		Timeout:   opts.Timeouts.Timeout,
 	}
 	return &Datasource{
 		settings:   settings,
@@ -54,7 +50,7 @@ func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.In
 type Datasource struct {
 	settings backend.DataSourceInstanceSettings
 
-	httpClient *http.Client
+	httpClient http.Client
 }
 
 // Dispose here tells plugin SDK that plugin wants to clean up resources when a new instance
@@ -75,19 +71,10 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 
 	// loop over queries and execute them individually.
 	for _, q := range req.Queries {
-		// if i%2 != 0 {
-		// 	// Just to demonstrate how to return an error with a custom status code.
-		// 	response.Responses[q.RefID] = backend.ErrDataResponse(
-		// 		backend.StatusBadRequest,
-		// 		fmt.Sprintf("user friendly error for query number %v, excluding any sensitive information", i+1),
-		// 	)
-		// 	continue
-		// }
-
 		res, err := d.query(ctx, req.PluginContext, q)
 		switch {
 		case err == nil:
-			break
+			// do nothing
 		case errors.Is(err, context.DeadlineExceeded):
 			res = backend.ErrDataResponse(backend.StatusTimeout, "gateway timeout")
 		case errors.Is(err, errRemoteRequest):
@@ -112,13 +99,11 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		Query:    query,
 	}
 	apiResult, err := zendeskApi.FetchTickets(ctx, query)
-	tickets := apiResult
 	if err != nil {
 		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
 	}
-
-	fs, err := framestruct.ToDataFrames("Results", tickets)
+	fs, err := framestruct.ToDataFrames("Results", apiResult)
 	if err != nil {
 		return backend.DataResponse{}, err
 	}
@@ -128,32 +113,45 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 	}, err
 }
 
+func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
+	switch req.Path {
+	case "ticket_fields":
+		zendeskApi := api{
+			Settings: d.settings,
+			Client:   d.httpClient,
+			Query:    backend.DataQuery{},
+		}
+		apiResult, err := zendeskApi.FetchTicketFields(ctx)
+		if err != nil {
+			log.DefaultLogger.Error("Error fetching ticket fields", "error", err)
+			return err
+		}
+		return sender.Send(&backend.CallResourceResponse{
+			Status: http.StatusOK,
+			Body:   apiResult,
+		})
+	default:
+		return sender.Send(&backend.CallResourceResponse{
+			Status: http.StatusNotFound,
+		})
+	}
+}
+
 // CheckHealth performs a request to the specified data source and returns an error if the HTTP handler did not return
 // a 200 OK response.
 func (d *Datasource) CheckHealth(ctx context.Context, _ *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	r, err := http.NewRequestWithContext(ctx, http.MethodGet, d.settings.URL+"account", nil)
+	api := api{
+		Settings: d.settings,
+		Client:   d.httpClient,
+	}
+	resp, err := api.GetUserAccount(ctx)
 	if err != nil {
-		return newHealthCheckErrorf("could not create request"), nil
+		return newHealthCheckErrorf("request error" + err.Error()), nil
 	}
-	r.Header.Set("Accept", "application/json")
-	resp, err := d.httpClient.Do(r)
-	if err != nil {
-		return newHealthCheckErrorf("request error"), nil
-	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.DefaultLogger.Error("check health: failed to close response body", "err", err.Error())
-		}
-	}()
-	if resp.StatusCode != http.StatusOK {
-		return newHealthCheckErrorf("got response code %d", resp.StatusCode), nil
-	}
-	var accountResponse models.UserAccountResponse
-	json.NewDecoder(resp.Body).Decode(&accountResponse)
 
 	return &backend.CheckHealthResult{
 		Status:  backend.HealthStatusOk,
-		Message: "Data source is working, signed in as: " + accountResponse.Account.Name,
+		Message: "Data source is working, signed in as: " + resp.Account.Name,
 	}, nil
 }
 

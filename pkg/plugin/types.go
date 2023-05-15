@@ -70,17 +70,21 @@ type apiTicket struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
-// type SelectableQueryRow struct {
-// 	selectedKeyword   string
-// 	availableKeywords []string
-// 	operator          string
-// 	terms             []string
-// 	availableTerms    []string
-// 	uniqueId          string
-// 	querystring       string
-// }
-
 type apiQuery struct {
 	QueryString string `json:"querystring"`
-	// Filters     []SelectableQueryRow `json:"filters"`
+}
+
+type UserObject struct {
+	Url          string `json:"url"`
+	Name         string `json:"name"`
+	Sandbox      bool   `json:"sandbox"`
+	Subdomain    string `json:"subdomain"`
+	TimeFormat   int    `json:"time_format"`
+	TimeZone     string `json:"time_zone"`
+	OwnerID      int    `json:"owner_id"`
+	Multiproduct bool   `json:"multiproduct"`
+}
+
+type UserAccountResponse struct {
+	Account UserObject `json:"account"`
 }

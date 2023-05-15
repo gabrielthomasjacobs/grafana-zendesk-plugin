@@ -11,6 +11,14 @@
       "args": ["--standalone=true"]
     },
     {
+      "name": "attach standalone plugin",
+      "type": "go",
+      "request": "attach",
+      "mode": "remote",
+      "port": 3100,
+      "host": "127.0.0.1"
+    },
+    {
       "name": "Debug in Container",
       "type": "go",
       "request": "attach",
