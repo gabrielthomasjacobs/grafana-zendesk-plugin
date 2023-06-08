@@ -2,7 +2,6 @@ package plugin
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,24 +13,11 @@ import (
 )
 
 type api struct {
-	Client   http.Client
+	Client   *http.Client
 	Settings backend.DataSourceInstanceSettings
 	Query    backend.DataQuery
 	Target   string
 	Filters  map[string]string
-}
-
-func (a api) getAuthHeaderValue() (string, error) {
-	httpOptions, err := a.Settings.HTTPClientOptions()
-	if err != nil {
-		return "", fmt.Errorf("error getting http client options: %w", err)
-	}
-
-	user := httpOptions.BasicAuth.User
-	password := httpOptions.BasicAuth.Password
-	combined := []byte(user + ":" + password)
-	encoded := base64.StdEncoding.EncodeToString([]byte(combined))
-	return "Basic " + encoded, nil
 }
 
 func (a api) buildRequest(ctx context.Context, method string, url string) (*http.Request, error) {
@@ -39,12 +25,7 @@ func (a api) buildRequest(ctx context.Context, method string, url string) (*http
 	if err != nil {
 		return nil, fmt.Errorf("new request: %w", err)
 	}
-	encoded, err := a.getAuthHeaderValue()
-	if err != nil {
-		return nil, fmt.Errorf("error encoding auth: %w", err)
-	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Add("Authorization", encoded)
 
 	return req, nil
 }
@@ -69,7 +50,11 @@ func (a api) FetchTickets(ctx context.Context, query backend.DataQuery) ([]apiTi
 }
 
 func (a api) query(ctx context.Context, query apiQuery, params url.Values) ([]apiTicket, error) {
-	req, err := a.buildRequest(ctx, http.MethodGet, a.Settings.URL+"search")
+	serchEndpoint, err := url.JoinPath(a.Settings.URL, "search")
+	if err != nil {
+		return []apiTicket{}, fmt.Errorf("err forming url: %w", err)
+	}
+	req, err := a.buildRequest(ctx, http.MethodGet, serchEndpoint)
 	if err != nil {
 		return []apiTicket{}, fmt.Errorf("err building req: %w", err)
 	}
@@ -89,8 +74,11 @@ func (a api) query(ctx context.Context, query apiQuery, params url.Values) ([]ap
 }
 
 func (a api) FetchTicketFields(ctx context.Context) ([]byte, error) {
-	url := a.Settings.URL + "ticket_fields"
-	req, err := a.buildRequest(ctx, http.MethodGet, url)
+	fieldsEndpoint, err := url.JoinPath(a.Settings.URL, "ticket_fields")
+	if err != nil {
+		return []byte{}, fmt.Errorf("err forming url: %w", err)
+	}
+	req, err := a.buildRequest(ctx, http.MethodGet, fieldsEndpoint)
 	if err != nil {
 		return []byte{}, fmt.Errorf("err building req: %w", err)
 	}
@@ -110,7 +98,11 @@ func (a api) FetchTicketFields(ctx context.Context) ([]byte, error) {
 }
 
 func (a api) GetUserAccount(ctx context.Context) (UserAccountResponse, error) {
-	req, err := a.buildRequest(ctx, http.MethodGet, a.Settings.URL+"account")
+	accountEndpoint, err := url.JoinPath(a.Settings.URL, "account")
+	if err != nil {
+		return UserAccountResponse{}, fmt.Errorf("err forming url: %w", err)
+	}
+	req, err := a.buildRequest(ctx, http.MethodGet, accountEndpoint)
 	if err != nil {
 		return UserAccountResponse{}, fmt.Errorf("err building req: %w", err)
 	}

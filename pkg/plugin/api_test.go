@@ -3,24 +3,18 @@ package plugin
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"testing"
 
 	"github.com/gabrielthomasjacobs/zendeskplugin/pkg/mock"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/grafana/grafana-plugin-sdk-go/data/framestruct"
 	"github.com/grafana/grafana-plugin-sdk-go/experimental"
 )
 
 func TestFetchTickets(t *testing.T) {
-	settings := backend.DataSourceInstanceSettings{
-		BasicAuthEnabled: true,
-		BasicAuthUser:    "fooUser",
-		DecryptedSecureJSONData: map[string]string{
-			"basicAuthPassword": "fooPassword",
-		},
-	}
+	settings := backend.DataSourceInstanceSettings{}
 	opts, err := settings.HTTPClientOptions()
 	if err != nil {
 		t.Fail()
@@ -30,10 +24,7 @@ func TestFetchTickets(t *testing.T) {
 	routes := map[string]string{
 		"search": "schema",
 	}
-	cl := http.Client{
-		Transport: http.DefaultTransport,
-		Timeout:   opts.Timeouts.Timeout,
-	}
+	cl, err := httpclient.New(opts)
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()

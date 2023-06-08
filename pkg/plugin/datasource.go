@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/grafana/grafana-plugin-sdk-go/backend/httpclient"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data/framestruct"
 
@@ -35,13 +36,19 @@ func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.In
 	if err != nil {
 		return nil, fmt.Errorf("http client options: %w", err)
 	}
-	cl := http.Client{
-		Transport: http.DefaultTransport,
-		Timeout:   opts.Timeouts.Timeout,
+	cl, err := httpclient.New(opts)
+	if err != nil {
+		return nil, fmt.Errorf("http client: %w", err)
 	}
+	zendeskApi := api{
+		Client:   cl,
+		Settings: settings,
+	}
+
 	return &Datasource{
 		settings:   settings,
 		httpClient: cl,
+		zendeskApi: zendeskApi,
 	}, nil
 }
 
@@ -50,7 +57,9 @@ func NewDatasource(settings backend.DataSourceInstanceSettings) (instancemgmt.In
 type Datasource struct {
 	settings backend.DataSourceInstanceSettings
 
-	httpClient http.Client
+	httpClient *http.Client
+
+	zendeskApi api
 }
 
 // Dispose here tells plugin SDK that plugin wants to clean up resources when a new instance
@@ -93,12 +102,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 }
 
 func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, query backend.DataQuery) (backend.DataResponse, error) {
-	zendeskApi := api{
-		Settings: d.settings,
-		Client:   d.httpClient,
-		Query:    query,
-	}
-	apiResult, err := zendeskApi.FetchTickets(ctx, query)
+	apiResult, err := d.zendeskApi.FetchTickets(ctx, query)
 	if err != nil {
 		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
@@ -116,12 +120,7 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResourceRequest, sender backend.CallResourceResponseSender) error {
 	switch req.Path {
 	case "ticket_fields":
-		zendeskApi := api{
-			Settings: d.settings,
-			Client:   d.httpClient,
-			Query:    backend.DataQuery{},
-		}
-		apiResult, err := zendeskApi.FetchTicketFields(ctx)
+		apiResult, err := d.zendeskApi.FetchTicketFields(ctx)
 		if err != nil {
 			log.DefaultLogger.Error("Error fetching ticket fields", "error", err)
 			return err
@@ -140,11 +139,7 @@ func (d *Datasource) CallResource(ctx context.Context, req *backend.CallResource
 // CheckHealth performs a request to the specified data source and returns an error if the HTTP handler did not return
 // a 200 OK response.
 func (d *Datasource) CheckHealth(ctx context.Context, _ *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	api := api{
-		Settings: d.settings,
-		Client:   d.httpClient,
-	}
-	resp, err := api.GetUserAccount(ctx)
+	resp, err := d.zendeskApi.GetUserAccount(ctx)
 	if err != nil {
 		return newHealthCheckErrorf("request error" + err.Error()), nil
 	}
