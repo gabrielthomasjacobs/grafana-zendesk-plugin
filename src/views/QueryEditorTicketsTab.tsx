@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { formatFieldNameForQuery } from 'shared/FieldUtils';
 
 function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: ZendeskQuery) => void}){
-  const [filters, setFilters] = useState<SelectableQueryRow[]>(props.query.filters || undefined);
+  const [filters, setFilters] = useState<SelectableQueryRow[]>(props.query.filters || []);
   const [zendeskFields, setZendeskFields] = useState<ZendeskField[]>([]);
 
   useEffect(() => {

@@ -107,6 +107,22 @@ func (d *Datasource) query(ctx context.Context, pCtx backend.PluginContext, quer
 		log.DefaultLogger.Error("Error fetching tickets", "error", err)
 		return backend.DataResponse{}, err
 	}
+	// for each result in apiResult, add a property that tracks an incremented status of that result
+	for i, result := range apiResult {
+		if i == 0 { // incremement when result is still open
+			apiResult[i].CumulativeStatusCount = 0
+			if result.Status != "solved" && result.Status != "closed" {
+				apiResult[i].CumulativeStatusCount = 1
+			}
+		} else { // decrement when result is solved or closed
+			if result.Status == "solved" || result.Status == "closed" {
+				apiResult[i].CumulativeStatusCount = apiResult[i-1].CumulativeStatusCount - 1
+			} else {
+				apiResult[i].CumulativeStatusCount = apiResult[i-1].CumulativeStatusCount + 1
+			}
+		}
+	}
+
 	fs, err := framestruct.ToDataFrames("Results", apiResult)
 	if err != nil {
 		return backend.DataResponse{}, err
