@@ -66,8 +66,9 @@ type apiTicket struct {
 	// 		Rel any `json:"rel"`
 	// 	} `json:"source"`
 	// } `json:"via"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	CreatedAt             time.Time `json:"created_at"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty"`
+	CumulativeStatusCount float64   `json:"cumulative_status_count,omitempty"`
 }
 
 type apiQuery struct {
