@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+Add new variable 'CumulativeStatusCount' to track open/closed tickets. 
+Simplified version target.
+
 ## 1.1.0
 Package updates to support Grafana v10
 
