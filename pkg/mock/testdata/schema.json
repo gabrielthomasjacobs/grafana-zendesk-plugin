@@ -23,7 +23,8 @@
       "allow_channelback": false,
       "allow_attachments": true,
       "from_messaging_channel": false,
-      "result_type": "ticket"
+      "result_type": "ticket",
+      "CumulativeStatusCount": 1
     },
     {
       "url": "https://d3v-gabrielthomasjacobs.zendesk.com/api/v2/tickets/3.json",
@@ -47,7 +48,8 @@
       "allow_channelback": false,
       "allow_attachments": true,
       "from_messaging_channel": false,
-      "result_type": "ticket"
+      "result_type": "ticket",
+      "CumulativeStatusCount": 2
     }
   ]
 }
