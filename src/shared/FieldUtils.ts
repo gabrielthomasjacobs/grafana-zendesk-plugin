@@ -39,3 +39,32 @@ export const getFieldOptions = (field: ZendeskField | undefined): Array<{name: s
           field.custom_statuses?.map(status => ({name: status.agent_label, value: status.status_category})) || 
           field.system_field_options || []
 }
+
+export const generateEmptyField = (): ZendeskField => {
+  return {
+    id: 0,
+    key: '',
+    title: '',
+    raw_title: '',
+    raw_description: '',
+    type: '',
+    url: '',
+    description: '',
+    position: 0,
+    active: false,
+    required: false,
+    collapsed_for_agents: false,
+    regexp_for_validation: '',
+    title_in_portal: '',
+    visible_in_portal: false,
+    editable_in_portal: false,
+    required_in_portal: false,
+    tag: '',
+    created_at: '',
+    updated_at: '',
+    removable: false,
+    agent_description: '',
+    end_user_description: '',
+    system: true
+  }
+}

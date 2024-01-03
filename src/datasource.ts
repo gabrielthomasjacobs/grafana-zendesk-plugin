@@ -16,7 +16,7 @@ export class DataSource extends DataSourceWithBackend<ZendeskQuery, ZendeskDatas
 
   async metricFindQuery(query: {label: string, value: string, description: string}, options?: unknown): Promise<MetricFindValue[]> {
     if (!query) { return Promise.resolve([]) }
-    const metricFindQuery = new ZendeskMetricFindQuery(query);
+    const metricFindQuery = new ZendeskMetricFindQuery(query, this.instanceSettings.id);
     return firstValueFrom(metricFindQuery.metricFieldQuery())
   }
 
