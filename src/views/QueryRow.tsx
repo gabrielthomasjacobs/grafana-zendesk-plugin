@@ -1,7 +1,7 @@
 import { SelectableValue } from '@grafana/data';
 import { HorizontalGroup, IconButton, InlineField, InlineFieldRow, MultiSelect, Select } from '@grafana/ui';
 import React, { useEffect, useState } from 'react';
-import { formatFieldNameForQuery, getFieldOptions } from 'shared/FieldUtils';
+import { formatFieldNameForQuery, getFieldOptions, generateEmptyField } from 'shared/FieldUtils';
 import { SelectableQueryRow, QueryOperator, ZendeskField } from 'types';
 
 type Props = {
@@ -26,7 +26,10 @@ export function QueryRow(props: Props) {
 
   const operators = [':', '-', '>', '<', '>=', '<='].map(v => ({label: v, value: v}));
   const emit = () => {
-    const field: ZendeskField | undefined = props.row.zendeskFields?.find((field) => formatFieldNameForQuery(field) === selectedField?.value);
+    let field: ZendeskField | undefined = props.row.zendeskFields?.find((field) => formatFieldNameForQuery(field) === selectedField?.value);
+    if(selectedField.value && selectedField.value?.trim() !== '' && !field) {
+      field = {...generateEmptyField(), title: selectedField.value, key: selectedField.value}
+    }
     const update = { ...props.row,
       selectedField: field,
       operator,
@@ -38,6 +41,13 @@ export function QueryRow(props: Props) {
   const updateSelectedField = (fieldName: string) => {
     const field = props.row.zendeskFields?.find((field) => formatFieldNameForQuery(field) === fieldName);
     if(!field) { return; }
+    setSelectedField({label: field.title, value: formatFieldNameForQuery(field)});
+    setTerms([]);
+  }
+
+  const createFieldOption = (fieldName: string) => {
+    if(fieldName.trim() === '' || !fieldName) {return};
+    const field = {...generateEmptyField(), title: fieldName, key: fieldName}
     setSelectedField({label: field.title, value: formatFieldNameForQuery(field)});
     setTerms([]);
   }
@@ -67,7 +77,8 @@ export function QueryRow(props: Props) {
             value={ selectedField }
             onChange={(v) => { updateSelectedField(v.value || '') }}
             onBlur={() => emit()}
-            allowCustomValue={false}
+            allowCustomValue={true}
+            onCreateOption={customValue => createFieldOption(customValue)}
             width={30}
           />
         </InlineField>

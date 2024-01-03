@@ -10,15 +10,16 @@ type SelectableField = {label: string, value: string, description: string};
 interface VariableQueryProps {
   query: SelectableValue<SelectableField>;
   onChange: (query: SelectableValue<SelectableField>, definition: string) => void;
+  datasource: any;
 }
 
-export const VariableQueryEditor = ({ onChange, query }: VariableQueryProps) => {
+export const VariableQueryEditor = ({ onChange, query, datasource }: VariableQueryProps) => {
   const [state, setState] = useState(query);
   const [fields, setFields] = useState<SelectableValue[]>([]);
 
   useEffect(() => {
     const fetchAvailableFields = async () => {
-      const fields = await firstValueFrom(fetchFields());
+      const fields = await firstValueFrom(fetchFields(datasource.id));
       const formattedFields = fields.filter(field => {
         // only return fields that have options
         return field.system_field_options || field.custom_field_options || field.custom_statuses || field.type === 'tagger'
@@ -36,7 +37,7 @@ export const VariableQueryEditor = ({ onChange, query }: VariableQueryProps) => 
     };
     
     fetchAvailableFields().catch((e) => console.error(e));
-  }, [])
+  }, [datasource.id])
 
   const handleChange = (selection: SelectableValue<SelectableField>) =>{
     setState(selection)

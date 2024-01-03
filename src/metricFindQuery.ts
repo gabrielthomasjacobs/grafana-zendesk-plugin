@@ -6,8 +6,10 @@ import { ZendeskField} from 'types';
 
 export default class ZendeskMetricFindQuery {
   query;
-  constructor(query: SelectableValue) {
+  dataSourceID;
+  constructor(query: SelectableValue, datasourceId: number) {
     this.query = query;
+    this.dataSourceID = datasourceId;
   }
 
   matchField = (fields: ZendeskField[]): ZendeskField => {
@@ -39,7 +41,7 @@ export default class ZendeskMetricFindQuery {
   }
 
   metricFieldQuery = (): Observable<MetricFindValue[]> => {
-    return fetchFields()
+    return fetchFields(this.dataSourceID)
       .pipe(
         map(fields => this.matchField(fields)),
         map(field => this.mapFieldToFindValue(field)),
