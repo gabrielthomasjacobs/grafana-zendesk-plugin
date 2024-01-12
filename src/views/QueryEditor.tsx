@@ -36,7 +36,7 @@ function QueryEditor(props: Props) {
         {tabs[0].active && 
           <QueryEditorTicketsTab 
             query={props.query}
-            dataSourceID={props.datasource.id}
+            dataSourceUID={props.datasource.uid}
             onChange={handleTabQueryChange}/>}
         {/* {tabs[1].active && <div>Second tab content</div>} */}
       </TabContent>
