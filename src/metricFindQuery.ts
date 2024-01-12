@@ -7,7 +7,7 @@ import { ZendeskField} from 'types';
 export default class ZendeskMetricFindQuery {
   query;
   dataSourceID;
-  constructor(query: SelectableValue, datasourceId: number) {
+  constructor(query: SelectableValue, datasourceId: string) {
     this.query = query;
     this.dataSourceID = datasourceId;
   }

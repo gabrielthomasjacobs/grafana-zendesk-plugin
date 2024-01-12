@@ -7,17 +7,17 @@ import { fetchFields } from 'shared/API';
 import { firstValueFrom } from 'rxjs';
 import { formatFieldNameForQuery } from 'shared/FieldUtils';
 
-function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: ZendeskQuery) => void, dataSourceID: number}){
+function QueryEditorTicketsTab(props: {query: ZendeskQuery, onChange: (update: ZendeskQuery) => void, dataSourceUID: string}){
   const [filters, setFilters] = useState<SelectableQueryRow[]>(props.query.filters || []);
   const [zendeskFields, setZendeskFields] = useState<ZendeskField[]>([]);
 
   useEffect(() => {
     const fetchZendeskFields = async () => {
-      const fields = await firstValueFrom(fetchFields(props.dataSourceID));
+      const fields = await firstValueFrom(fetchFields(props.dataSourceUID));
       setZendeskFields(fields);
     }
     fetchZendeskFields();
-  }, [props.dataSourceID])
+  }, [props.dataSourceUID])
 
   const handleQueryInputChange = (rows: SelectableQueryRow[]) => {
     const joinedQueryString = rows

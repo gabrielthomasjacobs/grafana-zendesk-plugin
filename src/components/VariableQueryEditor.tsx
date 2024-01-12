@@ -19,7 +19,7 @@ export const VariableQueryEditor = ({ onChange, query, datasource }: VariableQue
 
   useEffect(() => {
     const fetchAvailableFields = async () => {
-      const fields = await firstValueFrom(fetchFields(datasource.id));
+      const fields = await firstValueFrom(fetchFields(datasource.uid));
       const formattedFields = fields.filter(field => {
         // only return fields that have options
         return field.system_field_options || field.custom_field_options || field.custom_statuses || field.type === 'tagger'
@@ -37,7 +37,7 @@ export const VariableQueryEditor = ({ onChange, query, datasource }: VariableQue
     };
     
     fetchAvailableFields().catch((e) => console.error(e));
-  }, [datasource.id])
+  }, [datasource.uid])
 
   const handleChange = (selection: SelectableValue<SelectableField>) =>{
     setState(selection)
