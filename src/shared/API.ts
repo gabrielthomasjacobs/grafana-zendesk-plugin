@@ -5,7 +5,7 @@ import { Observable, map } from 'rxjs'
 export const fetchFields = (datasourceId: number): Observable<ZendeskField[]> => {
 
   return getBackendSrv().fetch({
-    url: `/api/datasources/${datasourceId}/resources/ticket_fields`,
+    url: `/api/datasources/uid/${datasourceId}/resources/ticket_fields`,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
